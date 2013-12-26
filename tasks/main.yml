@@ -11,7 +11,7 @@
     - zlib1g-dev
 
 - name: rbenv | update rbenv repo
-  git: repo=git://github.com/sstephenson/rbenv.git dest=$rbenv_root version=v0.4.0
+  git: repo=git://github.com/sstephenson/rbenv.git dest=$rbenv_root version=$rbenv_version
 
 - name: rbenv | add rbenv to path
   file: path=/usr/local/bin/rbenv src={{ rbenv_root }}/bin/rbenv state=link
@@ -41,17 +41,17 @@
   file: path={{ tempdir.stdout }} state=absent
   when: rbuild_present.rc != 0
 
-- name: rbenv | check ruby $ruby_version installed
-  shell: RBENV_ROOT={{ rbenv_root }} rbenv versions | grep $ruby_version
+- name: rbenv | check ruby $rbenv_ruby_version installed
+  shell: RBENV_ROOT={{ rbenv_root }} rbenv versions | grep $rbenv_ruby_version
   register: ruby_installed
   ignore_errors: yes
 
-- name: rbenv | install ruby $ruby_version
-  shell: RBENV_ROOT={{ rbenv_root }} rbenv install $ruby_version
+- name: rbenv | install ruby $rbenv_ruby_version
+  shell: RBENV_ROOT={{ rbenv_root }} rbenv install $rbenv_ruby_version
   when: ruby_installed.rc != 0
 
-- name: rbenv | set global ruby $ruby_version
-  shell: RBENV_ROOT={{ rbenv_root }} rbenv global $ruby_version
+- name: rbenv | set global ruby $rbenv_ruby_version
+  shell: RBENV_ROOT={{ rbenv_root }} rbenv global $rbenv_ruby_version
   when: ruby_installed.rc != 0
 
 - name: rbenv | rehash
@@ -63,5 +63,5 @@
 
 - name: rbenv | install {{ item }} gem
   gem: name={{ item }} state=present
-  with_items: $gems
+  with_items: $rbenv_gems
   ignore_errors: true
