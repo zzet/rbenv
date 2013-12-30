@@ -1,6 +1,0 @@
----
-rbenv_root: /usr/local/rbenv
-rbenv_version: v.0.4.0
-rbenv_ruby_version: 2.0.0-p247
-rbenv_gems:
-  - 'bundler'
