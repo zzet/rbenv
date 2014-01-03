@@ -1,9 +1,10 @@
 ---
-rbenv_version: v.0.4.0
-rbenv_ruby_version:
-  - 2.0.0-p247
-  - 2.1.0
-rbenv_type: system
+rbenv:
+  env: system
+  version: v0.4.0
+  ruby_version: 2.0.0-p247
+
+rbenv_repo: "git://github.com/sstephenson/rbenv.git"
 
 rbenv_plugins:
   - { name: "rbenv-vars",         repo: "git://github.com/sstephenson/rbenv-vars.git",         version: "v1.2.0" }
@@ -14,8 +15,6 @@ rbenv_plugins:
   - { name: "rbenv-whatis",       repo: "git://github.com/rkh/rbenv-whatis.git",               version: "v1.0.0" }
   - { name: "rbenv-use",          repo: "git://github.com/rkh/rbenv-use.git",                  version: "v1.0.0" }
 
-sytem_env:
-  rbenv_root: /usr/local/rbenv
+rbenv_root: "{% if rbenv.env == 'system' %}/usr/local/rbenv{% else %}~/.rbenv{% endif %}"
 
-user_env:
-  rbenv_root: ~/.rbenv
+users: []

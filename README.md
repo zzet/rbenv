@@ -1,33 +1,64 @@
 Role Name
 ========
 
-A brief description of the role goes here.
+Role for install rbenv
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by the ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+none
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+Defaults is:
+
+    rbenv:
+      env: system
+      version: v0.4.0
+      ruby_version: 2.0.0-p247
+
+    rbenv_repo: "git://github.com/sstephenson/rbenv.git"
+
+    rbenv_plugins:
+      - { name: "rbenv-vars",         repo: "git://github.com/sstephenson/rbenv-vars.git",         version: "v1.2.0" }
+      - { name: "ruby-build",         repo: "git://github.com/sstephenson/ruby-build.git",         version: "v20131225.1" }
+      - { name: "rbenv-default-gems", repo: "git://github.com/sstephenson/rbenv-default-gems.git", version: "v1.0.0" }
+      - { name: "rbenv-installer",    repo: "git://github.com/fesplugas/rbenv-installer.git",      version: "8bb9d34d01f78bd22e461038e887d6171706e1ba" }
+      - { name: "rbenv-update",       repo: "git://github.com/rkh/rbenv-update.git",               version: "32218db487dca7084f0e1954d613927a74bc6f2d" }
+      - { name: "rbenv-whatis",       repo: "git://github.com/rkh/rbenv-whatis.git",               version: "v1.0.0" }
+      - { name: "rbenv-use",          repo: "git://github.com/rkh/rbenv-use.git",                  version: "v1.0.0" }
+
+    rbenv_root: "{% if rbenv.env == 'system' %}/usr/local/rbenv{% else %}~/.rbenv{% endif %}"
+
+    users: []
+
+Description:
+
+` rbenv.env ` - Type of rbenv installation. Allow 'system' or 'user' values.
+` rbenv.version ` - Version of rbenv to install (tag from [rbenv releases page](https://github.com/sstephenson/rbenv/releases))
+` rbenv.ruby_version ` - Version ruby to install as global rbenv ruby
+` rbenv_repo ` - Repository with source code of rbenv to install.
+` rbenv_plugins ` - Array of Hash with information about plugins to install.
+` rbenv_root ` - Install path.
+` users ` - Array of Hash with users for multiuser inslall. User must present in system.
+
+ Example:
+    - { name: "user", home: "/home/user/", comment: "Deploy user" }
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+zzet.common
 
 License
 -------
 
-BSD
+MIT
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
-
-
+[Andrew Kumanyaev](http://github.com/zzet)
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/zzet/ansible-rbenv-role/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
