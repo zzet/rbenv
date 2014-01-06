@@ -1,3 +1,7 @@
+---
+- name: include env vars
+  include_vars: "{{ rbenv.env }}.yml"
+
 - name: install build depends
   apt: pkg={{ item }} state=latest install_recommends=no
   with_items:
@@ -9,6 +13,7 @@
     - libxml2-dev
     - libxslt1-dev
     - zlib1g-dev
+  sudo: true
   tags:
     - rbenv
 
@@ -65,14 +70,6 @@
   tags:
     - rbenv
 
-- name: add rbenv initialization to users profile
-  lineinfile: dest="{{ item.home }}/.bashrc" state=present regexp='^.*\/etc\/profile.*rbenv.*' line=". /etc/profile.d/rbenv.sh"
-  sudo: true
-  sudo_user: "{{ item.name }}"
-  with_items: users
-  tags:
-    - rbenv
-
 - name: set default-gems
   copy: src=default-gems dest={{ item.home }}/.rbenv/default-gems
   with_items: $users
@@ -104,26 +101,26 @@
     - rbenv
 
 - name: check ruby {{ rbenv.ruby_version }} installed
-  shell: "PATH={{ rbenv_root }}/bin:$PATH RBENV_ROOT={{ rbenv_root }} rbenv versions | grep {{ rbenv.ruby_version }}"
+  shell: bash -lc "rbenv versions | grep {{ rbenv.ruby_version }}"
   register: ruby_installed
   ignore_errors: yes
   tags:
     - rbenv
 
 - name: install ruby {{ rbenv.ruby_version }}
-  shell: "PATH={{ rbenv_root }}/bin:$PATH RBENV_ROOT={{ rbenv_root }} rbenv install {{ rbenv.ruby_version }} && rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
+  shell: bash -lc "rbenv install {{ rbenv.ruby_version }}"
   when: ruby_installed.rc != 0
   tags:
     - rbenv
 
 - name: install ruby {{ rbenv.ruby_version }}
-  shell: "PATH={{ rbenv_root }}/bin:$PATH RBENV_ROOT={{ rbenv_root }} rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
+  shell: bash -lc "rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
   when: ruby_installed.rc != 0
   tags:
     - rbenv
 
 - name: check ruby {{ rbenv.ruby_version }} installed
-  shell: "PATH={{ rbenv_root }}/bin:$PATH RBENV_ROOT={{ rbenv_root }} rbenv versions | grep {{ rbenv.ruby_version }}"
+  shell: bash -lc "rbenv versions | grep {{ rbenv.ruby_version }}"
   sudo: true
   sudo_user: "{{ item.name }}"
   with_items: $users
@@ -145,7 +142,7 @@
     - rbenv
 
 - name: install ruby {{ rbenv.ruby_version }}
-  shell: "PATH={{ rbenv_root }}/bin:$PATH RBENV_ROOT={{ rbenv_root }} rbenv install {{ rbenv.ruby_version }}"
+  shell: bash -lc "rbenv install {{ rbenv.ruby_version }}"
   sudo: true
   sudo_user: "{{ item[1].name }}"
   with_together:
@@ -157,7 +154,7 @@
     - rbenv
 
 - name: install ruby {{ rbenv.ruby_version }}
-  shell: "PATH={{ rbenv_root }}/bin:$PATH RBENV_ROOT={{ rbenv_root }} rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
+  shell: bash -lc "rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
   sudo: true
   sudo_user: "{{ item[1].name }}"
   with_together:
