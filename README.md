@@ -35,16 +35,18 @@ Defaults is:
 
 Description:
 
-` rbenv.env ` - Type of rbenv installation. Allow 'system' or 'user' values.
-` rbenv.version ` - Version of rbenv to install (tag from [rbenv releases page](https://github.com/sstephenson/rbenv/releases))
-` rbenv.ruby_version ` - Version ruby to install as global rbenv ruby
-` rbenv_repo ` - Repository with source code of rbenv to install.
-` rbenv_plugins ` - Array of Hash with information about plugins to install.
-` rbenv_root ` - Install path.
-` users ` - Array of Hash with users for multiuser inslall. User must present in system.
+- ` rbenv.env ` - Type of rbenv installation. Allow 'system' or 'user' values.
+- ` rbenv.version ` - Version of rbenv to install (tag from [rbenv releases page](https://github.com/sstephenson/rbenv/releases))
+- ` rbenv.ruby_version ` - Version ruby to install as global rbenv ruby
+- ` rbenv_repo ` - Repository with source code of rbenv to install
+- ` rbenv_plugins ` - Array of Hash with information about plugins to install
+- ` rbenv_root ` - Install path
+- ` users ` - Array of Hash with users for multiuser inslall. User must present in system
 
- Example:
-    - { name: "user", home: "/home/user/", comment: "Deploy user" }
+Example:
+
+    users:
+      - { name: "user", home: "/home/user/", comment: "Deploy user" }
 
 Dependencies
 ------------
