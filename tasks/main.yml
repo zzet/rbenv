@@ -1,4 +1,4 @@
-- name: rbenv | install build depends
+- name: install build depends
   apt: pkg={{ item }} state=latest install_recommends=no
   with_items:
     - build-essential
@@ -12,23 +12,23 @@
   tags:
     - rbenv
 
-- name: rbenv | checkout rbenv_repo
+- name: checkout rbenv_repo
   git: repo={{ rbenv_repo }} dest={{ rbenv_root }} version={{ rbenv.version }}
   tags:
     - rbenv
 
-- name: rbenv | create plugins directory
+- name: create plugins directory
   file: state=directory path={{ rbenv_root }}/plugins
   tags:
     - rbenv
 
-- name: rbenv | install plugins
+- name: install plugins
   git: repo={{ item.repo }} dest={{ rbenv_root }}/plugins/{{ item.name }} version={{ item.version }}
   with_items: $rbenv_plugins
   tags:
     - rbenv
 
-- name: rbenv | checkout rbenv_repo for selected users
+- name: checkout rbenv_repo for selected users
   git: repo={{ rbenv_repo }} dest={{ rbenv_root }} version={{ rbenv.version }}
   with_items: $users
   sudo: true
@@ -38,7 +38,7 @@
   tags:
     - rbenv
 
-- name: rbenv | create plugins directory for selected users
+- name: create plugins directory for selected users
   file: state=directory path={{ rbenv_root }}/plugins
   with_items: $users
   sudo: true
@@ -48,7 +48,7 @@
   tags:
     - rbenv
 
-- name: rbenv | install plugins for selected users
+- name: install plugins for selected users
   git: repo={{ item[1].repo }} dest={{ rbenv_root }}/plugins/{{ item[1].name }} version={{ item[1].version }}
   with_nested:
     - $users
@@ -60,12 +60,20 @@
   tags:
     - rbenv
 
-- name: rbenv | add rbenv initialization to profile
+- name: add rbenv initialization to profile
   template: src=rbenv.sh.j2 dest=/etc/profile.d/rbenv.sh owner=root group=root mode=0755
   tags:
     - rbenv
 
-- name: rbenv | set default-gems
+- name: add rbenv initialization to users profile
+  lineinfile: dest="{{ item.home }}/.bashrc" state=present regexp='^.*\/etc\/profile.*rbenv.*' line=". /etc/profile.d/rbenv.sh"
+  sudo: true
+  sudo_user: "{{ item.name }}"
+  with_items: users
+  tags:
+    - rbenv
+
+- name: set default-gems
   copy: src=default-gems dest={{ item.home }}/.rbenv/default-gems
   with_items: $users
   sudo: true
@@ -75,7 +83,7 @@
   tags:
     - rbenv
 
-- name: rbenv | set gemrc
+- name: set gemrc
   copy: src=gemrc dest={{ item.home }}/.gemrc
   with_items: $users
   sudo: true
@@ -85,7 +93,7 @@
   tags:
     - rbenv
 
-- name: rbenv | set vars
+- name: set vars
   copy: src=vars dest={{ item.home }}/.rbenv/vars
   with_items: $users
   sudo: true
@@ -95,20 +103,26 @@
   tags:
     - rbenv
 
-- name: rbenv | check ruby ${ rbenv.ruby_version } installed
+- name: check ruby {{ rbenv.ruby_version }} installed
   shell: "PATH={{ rbenv_root }}/bin:$PATH RBENV_ROOT={{ rbenv_root }} rbenv versions | grep {{ rbenv.ruby_version }}"
   register: ruby_installed
   ignore_errors: yes
   tags:
     - rbenv
 
-- name: rbenv | install ruby ${ rbenv.ruby_version }
+- name: install ruby {{ rbenv.ruby_version }}
   shell: "PATH={{ rbenv_root }}/bin:$PATH RBENV_ROOT={{ rbenv_root }} rbenv install {{ rbenv.ruby_version }} && rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
   when: ruby_installed.rc != 0
   tags:
     - rbenv
 
-- name: rbenv | check ruby ${ rbenv.ruby_version } installed
+- name: install ruby {{ rbenv.ruby_version }}
+  shell: "PATH={{ rbenv_root }}/bin:$PATH RBENV_ROOT={{ rbenv_root }} rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
+  when: ruby_installed.rc != 0
+  tags:
+    - rbenv
+
+- name: check ruby {{ rbenv.ruby_version }} installed
   shell: "PATH={{ rbenv_root }}/bin:$PATH RBENV_ROOT={{ rbenv_root }} rbenv versions | grep {{ rbenv.ruby_version }}"
   sudo: true
   sudo_user: "{{ item.name }}"
@@ -119,7 +133,7 @@
   tags:
     - rbenv
 
-- name: rbenv | chown permission to .rbenv directory
+- name: chown permission to .rbenv directory
   shell: "chown -R {{ item[1].name }}:{{ item[1].name }} {{ item[1].home }}/.rbenv"
   sudo: true
   with_together:
@@ -130,8 +144,20 @@
   tags:
     - rbenv
 
-- name: rbenv | install ruby ${ rbenv.ruby_version }
-  shell: "PATH={{ rbenv_root }}/bin:$PATH RBENV_ROOT={{ rbenv_root }} rbenv install {{ rbenv.ruby_version }} && rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
+- name: install ruby {{ rbenv.ruby_version }}
+  shell: "PATH={{ rbenv_root }}/bin:$PATH RBENV_ROOT={{ rbenv_root }} rbenv install {{ rbenv.ruby_version }}"
+  sudo: true
+  sudo_user: "{{ item[1].name }}"
+  with_together:
+    - ruby_installed.results
+    - users
+  when: (not "system" == "{{ rbenv.env }}") and (item[0].rc != 0)
+  ignore_errors: true
+  tags:
+    - rbenv
+
+- name: install ruby {{ rbenv.ruby_version }}
+  shell: "PATH={{ rbenv_root }}/bin:$PATH RBENV_ROOT={{ rbenv_root }} rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
   sudo: true
   sudo_user: "{{ item[1].name }}"
   with_together:
