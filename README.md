@@ -21,13 +21,26 @@ Defaults is:
     rbenv_repo: "git://github.com/sstephenson/rbenv.git"
 
     rbenv_plugins:
-      - { name: "rbenv-vars",         repo: "git://github.com/sstephenson/rbenv-vars.git",         version: "v1.2.0" }
-      - { name: "ruby-build",         repo: "git://github.com/sstephenson/ruby-build.git",         version: "v20131225.1" }
-      - { name: "rbenv-default-gems", repo: "git://github.com/sstephenson/rbenv-default-gems.git", version: "v1.0.0" }
-      - { name: "rbenv-installer",    repo: "git://github.com/fesplugas/rbenv-installer.git",      version: "8bb9d34d01f78bd22e461038e887d6171706e1ba" }
-      - { name: "rbenv-update",       repo: "git://github.com/rkh/rbenv-update.git",               version: "32218db487dca7084f0e1954d613927a74bc6f2d" }
-      - { name: "rbenv-whatis",       repo: "git://github.com/rkh/rbenv-whatis.git",               version: "v1.0.0" }
-      - { name: "rbenv-use",          repo: "git://github.com/rkh/rbenv-use.git",                  version: "v1.0.0" }
+      - { name: "rbenv-vars",
+          repo: "git://github.com/sstephenson/rbenv-vars.git",         version: "v1.2.0" }
+
+      - { name: "ruby-build",
+          repo: "git://github.com/sstephenson/ruby-build.git",         version: "v20131225.1" }
+
+      - { name: "rbenv-default-gems",
+          repo: "git://github.com/sstephenson/rbenv-default-gems.git", version: "v1.0.0" }
+
+      - { name: "rbenv-installer",
+          repo: "git://github.com/fesplugas/rbenv-installer.git",      version: "8bb9d34d01f78bd22e461038e887d6171706e1ba" }
+
+      - { name: "rbenv-update",
+          repo: "git://github.com/rkh/rbenv-update.git",               version: "32218db487dca7084f0e1954d613927a74bc6f2d" }
+
+      - { name: "rbenv-whatis",
+          repo: "git://github.com/rkh/rbenv-whatis.git",               version: "v1.0.0" }
+
+      - { name: "rbenv-use",
+          repo: "git://github.com/rkh/rbenv-use.git",                  version: "v1.0.0" }
 
     rbenv_root: "{% if rbenv.env == 'system' %}/usr/local/rbenv{% else %}~/.rbenv{% endif %}"
 
@@ -62,5 +75,6 @@ Author Information
 ------------------
 
 [Andrew Kumanyaev](http://github.com/zzet)
+
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/zzet/ansible-rbenv-role/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
