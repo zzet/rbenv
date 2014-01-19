@@ -3,6 +3,11 @@ Role Name
 
 Role for install rbenv
 
+Role ready status
+------------
+
+[![Build Status](https://travis-ci.org/zzet/ansible-rbenv-role.png?branch=master)](https://travis-ci.org/zzet/ansible-rbenv-role)
+
 Requirements
 ------------
 
