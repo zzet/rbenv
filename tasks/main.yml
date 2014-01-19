@@ -29,13 +29,13 @@
 
 - name: install plugins
   git: repo={{ item.repo }} dest={{ rbenv_root }}/plugins/{{ item.name }} version={{ item.version }}
-  with_items: $rbenv_plugins
+  with_items: rbenv_plugins
   tags:
     - rbenv
 
 - name: checkout rbenv_repo for selected users
   git: repo={{ rbenv_repo }} dest={{ rbenv_root }} version={{ rbenv.version }}
-  with_items: $users
+  with_items: users
   sudo: true
   sudo_user: "{{ item.name }}"
   when: not "system" == "{{ rbenv.env }}"
@@ -45,7 +45,7 @@
 
 - name: create plugins directory for selected users
   file: state=directory path={{ rbenv_root }}/plugins
-  with_items: $users
+  with_items: users
   sudo: true
   sudo_user: "{{ item.name }}"
   when: not "system" == "{{ rbenv.env }}"
@@ -56,8 +56,8 @@
 - name: install plugins for selected users
   git: repo={{ item[1].repo }} dest={{ rbenv_root }}/plugins/{{ item[1].name }} version={{ item[1].version }}
   with_nested:
-    - $users
-    - $rbenv_plugins
+    - users
+    - rbenv_plugins
   sudo: true
   sudo_user: "{{ item[0].name }}"
   when: not "system" == "{{ rbenv.env }}"
@@ -73,7 +73,7 @@
 
 - name: set default-gems
   copy: src=default-gems dest={{ item.home }}/.rbenv/default-gems
-  with_items: $users
+  with_items: users
   sudo: true
   sudo_user: "{{ item.name }}"
   when: not "system" == "{{ rbenv.env }}"
@@ -83,7 +83,7 @@
 
 - name: set gemrc
   copy: src=gemrc dest={{ item.home }}/.gemrc
-  with_items: $users
+  with_items: users
   sudo: true
   sudo_user: "{{ item.name }}"
   when: not "system" == "{{ rbenv.env }}"
@@ -93,7 +93,7 @@
 
 - name: set vars
   copy: src=vars dest={{ item.home }}/.rbenv/vars
-  with_items: $users
+  with_items: users
   sudo: true
   sudo_user: "{{ item.name }}"
   when: not "system" == "{{ rbenv.env }}"
@@ -124,7 +124,7 @@
   shell: bash -lc "rbenv versions | grep {{ rbenv.ruby_version }}"
   sudo: true
   sudo_user: "{{ item.name }}"
-  with_items: $users
+  with_items: users
   when: not "system" == "{{ rbenv.env }}"
   register: ruby_installed
   ignore_errors: yes
