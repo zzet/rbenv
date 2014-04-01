@@ -56,7 +56,7 @@ Defaults is:
 
     rbenv_root: "{% if rbenv.env == 'system' %}/usr/local/rbenv{% else %}~/.rbenv{% endif %}"
 
-    users: []
+    rbenv_users: []
 
 Description:
 
@@ -76,7 +76,7 @@ Example:
 Dependencies
 ------------
 
-zzet.common
+none
 
 License
 -------

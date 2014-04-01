@@ -17,4 +17,4 @@ rbenv_plugins:
 
 rbenv_root: "{% if rbenv.env == 'system' %}/usr/local/rbenv{% else %}~/.rbenv{% endif %}"
 
-users: []
+rbenv_users: []
