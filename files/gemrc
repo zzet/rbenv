@@ -1,5 +1,4 @@
 ---
 :sources:
 - http://gems.rubyforge.org
-- http://gems.github.com
 gem: --no-ri --no-rdoc
