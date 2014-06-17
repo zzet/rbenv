@@ -2,7 +2,7 @@
 rbenv:
   env: system
   version: v0.4.0
-  ruby_version: 2.0.0-p353
+  ruby_version: 2.0.0-p481
 
 rbenv_repo: "git://github.com/sstephenson/rbenv.git"
 
