@@ -18,7 +18,7 @@
     - rbenv
 
 - name: checkout rbenv_repo
-  git: repo={{ rbenv_repo }} dest={{ rbenv_root }} version={{ rbenv.version }}
+  git: repo={{ rbenv_repo }} dest={{ rbenv_root }} version={{ rbenv.version }} accept_hostkey=true
   tags:
     - rbenv
 
@@ -34,7 +34,7 @@
     - rbenv
 
 - name: checkout rbenv_repo for selected users
-  git: repo={{ rbenv_repo }} dest={{ rbenv_root }} version={{ rbenv.version }}
+  git: repo={{ rbenv_repo }} dest={{ rbenv_root }} version={{ rbenv.version }} accept_hostkey=true
   with_items: rbenv_users
   sudo: true
   sudo_user: "{{ item.name }}"
