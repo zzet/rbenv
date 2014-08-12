@@ -18,7 +18,11 @@
     - rbenv
 
 - name: checkout rbenv_repo
-  git: repo={{ rbenv_repo }} dest={{ rbenv_root }} version={{ rbenv.version }} accept_hostkey=true
+  git: >
+    repo={{ rbenv_repo }}
+    dest={{ rbenv_root }}
+    version={{ rbenv.version }}
+    accept_hostkey=true
   tags:
     - rbenv
 
@@ -28,13 +32,21 @@
     - rbenv
 
 - name: install plugins
-  git: repo={{ item.repo }} dest={{ rbenv_root }}/plugins/{{ item.name }} version={{ item.version }}
+  git: >
+    repo={{ item.repo }}
+    dest={{ rbenv_root }}/plugins/{{ item.name }}
+    version={{ item.version }}
+    accept_hostkey=true
   with_items: rbenv_plugins
   tags:
     - rbenv
 
 - name: checkout rbenv_repo for selected users
-  git: repo={{ rbenv_repo }} dest={{ rbenv_root }} version={{ rbenv.version }} accept_hostkey=true
+  git: >
+    repo={{ rbenv_repo }}
+    dest={{ rbenv_root }}
+    version={{ rbenv.version }}
+    accept_hostkey=true
   with_items: rbenv_users
   sudo: true
   sudo_user: "{{ item.name }}"
@@ -54,7 +66,11 @@
     - rbenv
 
 - name: install plugins for selected users
-  git: repo={{ item[1].repo }} dest={{ rbenv_root }}/plugins/{{ item[1].name }} version={{ item[1].version }}
+  git: >
+    repo={{ item[1].repo }}
+    dest={{ rbenv_root }}/plugins/{{ item[1].name }}
+    version={{ item[1].version }}
+    accept_hostkey=true
   with_nested:
     - rbenv_users
     - rbenv_plugins
