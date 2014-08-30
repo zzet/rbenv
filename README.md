@@ -66,11 +66,11 @@ Description:
 - ` rbenv_repo ` - Repository with source code of rbenv to install
 - ` rbenv_plugins ` - Array of Hash with information about plugins to install
 - ` rbenv_root ` - Install path
-- ` users ` - Array of Hash with users for multiuser inslall. User must present in system
+- ` rbenv_users ` - Array of Hash with users for multiuser inslall. User must present in system
 
 Example:
 
-    users:
+    rbenv_users:
       - { name: "user", home: "/home/user/", comment: "Deploy user" }
 
 Dependencies
