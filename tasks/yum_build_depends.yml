@@ -1,6 +1,6 @@
 ---
 - name: install build depends
-  yum: name={{ item }} state=latest
+  yum: name={{ item }} state=present
   with_items:
     - gcc
     - openssl-devel

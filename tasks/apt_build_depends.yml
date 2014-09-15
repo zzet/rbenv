@@ -1,5 +1,5 @@
 - name: install build depends
-  apt: pkg={{ item }} state=latest install_recommends=no
+  apt: pkg={{ item }} state=present install_recommends=no
   with_items:
     - build-essential
     - git
