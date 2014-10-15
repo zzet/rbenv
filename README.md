@@ -1,7 +1,7 @@
 rbenv
 ========
 
-Role for install rbenv
+Role for installing [rbenv](https://github.com/sstephenson/rbenv).
 
 Role ready status
 ------------
@@ -16,7 +16,7 @@ none
 Role Variables
 --------------
 
-Defaults is:
+Default variables are:
 
     rbenv:
       env: system
@@ -60,13 +60,13 @@ Defaults is:
 
 Description:
 
-- ` rbenv.env ` - Type of rbenv installation. Allow 'system' or 'user' values.
+- ` rbenv.env ` - Type of rbenv installation. Allows 'system' or 'user' values
 - ` rbenv.version ` - Version of rbenv to install (tag from [rbenv releases page](https://github.com/sstephenson/rbenv/releases))
-- ` rbenv.ruby_version ` - Version ruby to install as global rbenv ruby
+- ` rbenv.ruby_version ` - Version of ruby to install as global rbenv ruby
 - ` rbenv_repo ` - Repository with source code of rbenv to install
-- ` rbenv_plugins ` - Array of Hash with information about plugins to install
+- ` rbenv_plugins ` - Array of Hashes with information about plugins to install
 - ` rbenv_root ` - Install path
-- ` rbenv_users ` - Array of Hash with users for multiuser inslall. User must present in system
+- ` rbenv_users ` - Array of Hashes with users for multiuser install. User must be present in the system
 
 Example:
 
