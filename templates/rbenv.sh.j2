@@ -1,5 +1,5 @@
 {% if rbenv.env == 'system' %}
-export PATH=/usr/local/rbenv/bin:$PATH
+export PATH={{ rbenv_root }}/bin:$PATH
 export RBENV_ROOT="{{ rbenv_root }}"
 eval "$(rbenv init -)"
 {% else %}
