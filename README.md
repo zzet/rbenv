@@ -70,8 +70,16 @@ Description:
 
 Example:
 
-    rbenv_users:
-      - { name: "user", home: "/home/user/", comment: "Deploy user" }
+    - hosts: web
+      vars:
+        rbenv:
+          env: user
+          version: v0.4.0
+          ruby_version: 2.0.0-p353
+      roles:
+        - role: zzet.rbenv
+          rbenv_users:
+            - { name: "user", home: "/home/user/", comment: "Deploy user" }
 
 Dependencies
 ------------
