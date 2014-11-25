@@ -87,7 +87,21 @@
   with_items: rbenv_users
   sudo: true
   sudo_user: "{{ item.name }}"
-  when: not "system" == "{{ rbenv.env }}"
+  when:
+    - not "system" == "{{ rbenv.env }}"
+    - default_gems_file is not defined
+  ignore_errors: true
+  tags:
+    - rbenv
+
+- name: set custom default-gems
+  copy: src={{ default_gems_file }} dest={{ item.home }}/.rbenv/default-gems
+  with_items: rbenv_users
+  sudo: true
+  sudo_user: "{{ item.name }}"
+  when:
+    - not "system" == "{{ rbenv.env }}"
+    - default_gems_file is defined
   ignore_errors: true
   tags:
     - rbenv
