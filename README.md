@@ -67,6 +67,7 @@ Description:
 - ` rbenv_plugins ` - Array of Hashes with information about plugins to install
 - ` rbenv_root ` - Install path
 - ` rbenv_users ` - Array of Hashes with users for multiuser install. User must be present in the system
+- ` default_gems_file ` - This is Rbenv's plugin _rbenv-default-gems_. Sets the path to a default-gems file of your choice (_don't set it_ if you want to use the default file `files/default-gems`)
 
 Example:
 
