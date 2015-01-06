@@ -12,27 +12,30 @@
   when: ansible_os_family == 'Darwin'
 
 
-- name: checkout rbenv_repo
+- name: checkout rbenv_repo for system
   git: >
     repo={{ rbenv_repo }}
     dest={{ rbenv_root }}
     version={{ rbenv.version }}
     accept_hostkey=true
+  when: rbenv.env == "system"
   tags:
     - rbenv
 
-- name: create plugins directory
+- name: create plugins directory for system
   file: state=directory path={{ rbenv_root }}/plugins
+  when: rbenv.env == "system"
   tags:
     - rbenv
 
-- name: install plugins
+- name: install plugins for system
   git: >
     repo={{ item.repo }}
     dest={{ rbenv_root }}/plugins/{{ item.name }}
     version={{ item.version }}
     accept_hostkey=true
   with_items: rbenv_plugins
+  when: rbenv.env == "system"
   tags:
     - rbenv
 
@@ -76,13 +79,16 @@
   tags:
     - rbenv
 
-- name: add rbenv initialization to profile
+- name: add rbenv initialization to profile system-wide
   template: src=rbenv.sh.j2 dest=/etc/profile.d/rbenv.sh owner=root group=root mode=0755
   sudo: true
+  when:
+    - ansible_os_family != 'OpenBSD'
+    - rbenv.env == "system"
   tags:
     - rbenv
 
-- name: set default-gems
+- name: set default-gems for select users
   copy: src=default-gems dest={{ item.home }}/.rbenv/default-gems
   with_items: rbenv_users
   sudo: true
@@ -94,7 +100,7 @@
   tags:
     - rbenv
 
-- name: set custom default-gems
+- name: set custom default-gems for select users
   copy: src={{ default_gems_file }} dest={{ item.home }}/.rbenv/default-gems
   with_items: rbenv_users
   sudo: true
@@ -106,7 +112,7 @@
   tags:
     - rbenv
 
-- name: set gemrc
+- name: set gemrc for select users
   copy: src=gemrc dest={{ item.home }}/.gemrc
   with_items: rbenv_users
   sudo: true
@@ -116,7 +122,7 @@
   tags:
     - rbenv
 
-- name: set vars
+- name: set vars for select users
   copy: src=vars dest={{ item.home }}/.rbenv/vars
   with_items: rbenv_users
   sudo: true
@@ -126,28 +132,33 @@
   tags:
     - rbenv
 
-- name: check ruby {{ rbenv.ruby_version }} installed
-  shell: bash -lc "rbenv versions | grep {{ rbenv.ruby_version }}"
+- name: check ruby {{ rbenv.ruby_version }} installed for system
+  shell: $SHELL -lc "rbenv versions | grep {{ rbenv.ruby_version }}"
   register: ruby_installed
   changed_when: false
   ignore_errors: yes
+  when: rbenv.env == "system"
   tags:
     - rbenv
 
-- name: install ruby {{ rbenv.ruby_version }}
+- name: install ruby {{ rbenv.ruby_version }} for system
   shell: bash -lc "rbenv install {{ rbenv.ruby_version }}"
-  when: ruby_installed.rc != 0
+  when:
+    - rbenv.env == "system"
+    - ruby_installed.rc == 0
   tags:
     - rbenv
 
-- name: install ruby {{ rbenv.ruby_version }}
+- name: install ruby {{ rbenv.ruby_version }} for system
   shell: bash -lc "rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
-  when: ruby_installed.rc != 0
+  when:
+    - rbenv.env == "system"
+    - ruby_installed.rc == 0
   tags:
     - rbenv
 
-- name: check ruby {{ rbenv.ruby_version }} installed
-  shell: bash -lc "rbenv versions | grep {{ rbenv.ruby_version }}"
+- name: check ruby {{ rbenv.ruby_version }} installed for select users
+  shell: $SHELL -lc "rbenv versions | grep {{ rbenv.ruby_version }}"
   sudo: true
   sudo_user: "{{ item.name }}"
   with_items: rbenv_users
@@ -157,7 +168,7 @@
   tags:
     - rbenv
 
-- name: chown permission to .rbenv directory
+- name: chown permission to .rbenv directory for select users
   shell: "chown -R {{ item[1].name }}:{{ item[1].name }} {{ item[1].home }}/.rbenv"
   sudo: true
   with_together:
@@ -168,8 +179,8 @@
   tags:
     - rbenv
 
-- name: install ruby {{ rbenv.ruby_version }}
-  shell: bash -lc "rbenv install {{ rbenv.ruby_version }}"
+- name: install ruby {{ rbenv.ruby_version }} for select users
+  shell: $SHELL -lc "rbenv install {{ rbenv.ruby_version }}"
   sudo: true
   sudo_user: "{{ item[1].name }}"
   with_together:
@@ -180,8 +191,8 @@
   tags:
     - rbenv
 
-- name: install ruby {{ rbenv.ruby_version }}
-  shell: bash -lc "rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
+- name: install ruby {{ rbenv.ruby_version }} for select users
+  shell: $SHELL -lc "rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
   sudo: true
   sudo_user: "{{ item[1].name }}"
   with_together:
