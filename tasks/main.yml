@@ -84,7 +84,6 @@
   sudo: true
   when:
     - ansible_os_family != 'OpenBSD'
-    - rbenv.env == "system"
   tags:
     - rbenv
 
