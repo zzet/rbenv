@@ -144,7 +144,7 @@
   shell: bash -lc "rbenv install {{ rbenv.ruby_version }}"
   when:
     - rbenv.env == "system"
-    - ruby_installed.rc == 0
+    - ruby_installed.rc != 0
   tags:
     - rbenv
 
@@ -152,7 +152,7 @@
   shell: bash -lc "rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
   when:
     - rbenv.env == "system"
-    - ruby_installed.rc == 0
+    - ruby_installed.rc != 0
   tags:
     - rbenv
 
