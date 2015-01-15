@@ -47,7 +47,7 @@
     accept_hostkey=true
   with_items: rbenv_users
   sudo: true
-  sudo_user: "{{ item.name }}"
+  sudo_user: "{{ item }}"
   when: not "system" == "{{ rbenv.env }}"
   ignore_errors: true
   tags:
@@ -57,7 +57,7 @@
   file: state=directory path={{ rbenv_root }}/plugins
   with_items: rbenv_users
   sudo: true
-  sudo_user: "{{ item.name }}"
+  sudo_user: "{{ item }}"
   when: not "system" == "{{ rbenv.env }}"
   ignore_errors: true
   tags:
@@ -73,7 +73,7 @@
     - rbenv_users
     - rbenv_plugins
   sudo: true
-  sudo_user: "{{ item[0].name }}"
+  sudo_user: "{{ item[0] }}"
   when: not "system" == "{{ rbenv.env }}"
   ignore_errors: true
   tags:
@@ -88,10 +88,10 @@
     - rbenv
 
 - name: set default-gems for select users
-  copy: src=default-gems dest={{ item.home }}/.rbenv/default-gems
+  copy: src=default-gems dest={{ rbenv_root }}/default-gems
   with_items: rbenv_users
   sudo: true
-  sudo_user: "{{ item.name }}"
+  sudo_user: "{{ item }}"
   when:
     - not "system" == "{{ rbenv.env }}"
     - default_gems_file is not defined
@@ -100,10 +100,10 @@
     - rbenv
 
 - name: set custom default-gems for select users
-  copy: src={{ default_gems_file }} dest={{ item.home }}/.rbenv/default-gems
+  copy: src={{ default_gems_file }} dest={{ rbenv_root }}/default-gems
   with_items: rbenv_users
   sudo: true
-  sudo_user: "{{ item.name }}"
+  sudo_user: "{{ item }}"
   when:
     - not "system" == "{{ rbenv.env }}"
     - default_gems_file is defined
@@ -112,20 +112,20 @@
     - rbenv
 
 - name: set gemrc for select users
-  copy: src=gemrc dest={{ item.home }}/.gemrc
+  copy: src=gemrc dest=~/.gemrc
   with_items: rbenv_users
   sudo: true
-  sudo_user: "{{ item.name }}"
+  sudo_user: "{{ item }}"
   when: not "system" == "{{ rbenv.env }}"
   ignore_errors: true
   tags:
     - rbenv
 
 - name: set vars for select users
-  copy: src=vars dest={{ item.home }}/.rbenv/vars
+  copy: src=vars dest={{ rbenv_root }}/vars
   with_items: rbenv_users
   sudo: true
-  sudo_user: "{{ item.name }}"
+  sudo_user: "{{ item }}"
   when: not "system" == "{{ rbenv.env }}"
   ignore_errors: true
   tags:
@@ -159,7 +159,7 @@
 - name: check ruby {{ rbenv.ruby_version }} installed for select users
   shell: $SHELL -lc "rbenv versions | grep {{ rbenv.ruby_version }}"
   sudo: true
-  sudo_user: "{{ item.name }}"
+  sudo_user: "{{ item }}"
   with_items: rbenv_users
   when: not "system" == "{{ rbenv.env }}"
   register: ruby_installed
@@ -167,21 +167,10 @@
   tags:
     - rbenv
 
-- name: chown permission to .rbenv directory for select users
-  shell: "chown -R {{ item[1].name }}:{{ item[1].name }} {{ item[1].home }}/.rbenv"
-  sudo: true
-  with_together:
-    - ruby_installed.results
-    - rbenv_users
-  when: (not "system" == "{{ rbenv.env }}") and (item[0].rc != 0)
-  ignore_errors: true
-  tags:
-    - rbenv
-
 - name: install ruby {{ rbenv.ruby_version }} for select users
   shell: $SHELL -lc "rbenv install {{ rbenv.ruby_version }}"
   sudo: true
-  sudo_user: "{{ item[1].name }}"
+  sudo_user: "{{ item[1] }}"
   with_together:
     - ruby_installed.results
     - rbenv_users
@@ -193,7 +182,7 @@
 - name: install ruby {{ rbenv.ruby_version }} for select users
   shell: $SHELL -lc "rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
   sudo: true
-  sudo_user: "{{ item[1].name }}"
+  sudo_user: "{{ item[1] }}"
   with_together:
     - ruby_installed.results
     - rbenv_users
