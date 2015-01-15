@@ -54,7 +54,7 @@ Default variables are:
           repo: "git://github.com/rkh/rbenv-use.git",
           version: "v1.0.0" }
 
-    rbenv_root: "{% if rbenv.env == 'system' %}/usr/local/rbenv{% else %}~/.rbenv{% endif %}"
+    rbenv_root: "{% if rbenv.env == 'system' %}/usr/local/rbenv{% else %}$HOME/.rbenv{% endif %}"
 
     rbenv_users: []
 
@@ -66,7 +66,7 @@ Description:
 - ` rbenv_repo ` - Repository with source code of rbenv to install
 - ` rbenv_plugins ` - Array of Hashes with information about plugins to install
 - ` rbenv_root ` - Install path
-- ` rbenv_users ` - Array of Hashes with users for multiuser install. User must be present in the system
+- ` rbenv_users ` - Array of usernames for multiuser install. User must be present in the system
 - ` default_gems_file ` - This is Rbenv's plugin _rbenv-default-gems_. Sets the path to a default-gems file of your choice (_don't set it_ if you want to use the default file `files/default-gems`)
 
 Example:
@@ -80,7 +80,7 @@ Example:
       roles:
         - role: zzet.rbenv
           rbenv_users:
-            - { name: "user", home: "/home/user/", comment: "Deploy user" }
+            - user
 
 Dependencies
 ------------
@@ -98,4 +98,3 @@ Author Information
 [Andrew Kumanyaev](http://github.com/zzet)
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/zzet/ansible-rbenv-role/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
