@@ -148,7 +148,7 @@
   tags:
     - rbenv
 
-- name: install ruby {{ rbenv.ruby_version }} for system
+- name: set ruby {{ rbenv.ruby_version }} for system
   shell: bash -lc "rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
   when:
     - rbenv.env == "system"
@@ -179,7 +179,7 @@
   tags:
     - rbenv
 
-- name: install ruby {{ rbenv.ruby_version }} for select users
+- name: set ruby {{ rbenv.ruby_version }} for select users
   shell: $SHELL -lc "rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
   sudo: true
   sudo_user: "{{ item[1] }}"
