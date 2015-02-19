@@ -10,6 +10,7 @@
     - build-essential
     - git
     - libcurl4-openssl-dev
+    - libffi-dev
     - libreadline-dev
     - libssl-dev
     - libxml2-dev
