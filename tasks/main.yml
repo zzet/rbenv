@@ -136,6 +136,7 @@
   register: ruby_installed
   changed_when: false
   ignore_errors: yes
+  always_run: yes
   when: rbenv.env == "system"
   tags:
     - rbenv
@@ -163,7 +164,9 @@
   with_items: rbenv_users
   when: not "system" == "{{ rbenv.env }}"
   register: ruby_installed
+  changed_when: false
   ignore_errors: yes
+  always_run: yes
   tags:
     - rbenv
 
