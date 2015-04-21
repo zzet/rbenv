@@ -179,6 +179,8 @@
     - rbenv_users
   when: (not "system" == "{{ rbenv.env }}") and (item[0].rc != 0)
   ignore_errors: true
+  async: 900
+  poll: 30
   tags:
     - rbenv
 
