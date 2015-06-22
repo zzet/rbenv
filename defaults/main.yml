@@ -4,16 +4,16 @@ rbenv:
   version: v0.4.0
   ruby_version: 2.2.0
 
-rbenv_repo: "git://github.com/sstephenson/rbenv.git"
+rbenv_repo: "https://github.com/sstephenson/rbenv.git"
 
 rbenv_plugins:
-  - { name: "rbenv-vars",         repo: "git://github.com/sstephenson/rbenv-vars.git",         version: "v1.2.0" }
-  - { name: "ruby-build",         repo: "git://github.com/sstephenson/ruby-build.git",         version: "v20150413" }
-  - { name: "rbenv-default-gems", repo: "git://github.com/sstephenson/rbenv-default-gems.git", version: "v1.0.0" }
-  - { name: "rbenv-installer",    repo: "git://github.com/fesplugas/rbenv-installer.git",      version: "22cc96aa45d06faca5958b1aa1688596198407a3" }
-  - { name: "rbenv-update",       repo: "git://github.com/rkh/rbenv-update.git",               version: "bf757453498337807a46e24074d29173f1a8abec" }
-  - { name: "rbenv-whatis",       repo: "git://github.com/rkh/rbenv-whatis.git",               version: "v1.0.0" }
-  - { name: "rbenv-use",          repo: "git://github.com/rkh/rbenv-use.git",                  version: "v1.0.0" }
+  - { name: "rbenv-vars",         repo: "https://github.com/sstephenson/rbenv-vars.git",         version: "v1.2.0" }
+  - { name: "ruby-build",         repo: "https://github.com/sstephenson/ruby-build.git",         version: "v20150413" }
+  - { name: "rbenv-default-gems", repo: "https://github.com/sstephenson/rbenv-default-gems.git", version: "v1.0.0" }
+  - { name: "rbenv-installer",    repo: "https://github.com/fesplugas/rbenv-installer.git",      version: "22cc96aa45d06faca5958b1aa1688596198407a3" }
+  - { name: "rbenv-update",       repo: "https://github.com/rkh/rbenv-update.git",               version: "bf757453498337807a46e24074d29173f1a8abec" }
+  - { name: "rbenv-whatis",       repo: "https://github.com/rkh/rbenv-whatis.git",               version: "v1.0.0" }
+  - { name: "rbenv-use",          repo: "https://github.com/rkh/rbenv-use.git",                  version: "v1.0.0" }
 
 rbenv_root: "{% if rbenv.env == 'system' %}/usr/local/rbenv{% else %}~/.rbenv{% endif %}"
 
