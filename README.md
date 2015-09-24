@@ -32,7 +32,7 @@ Default variables are:
 
       - { name: "ruby-build",
           repo: "https://github.com/sstephenson/ruby-build.git",
-          version: "v20131225.1" }
+          version: "v20150818" }
 
       - { name: "rbenv-default-gems",
           repo: "https://github.com/sstephenson/rbenv-default-gems.git",
