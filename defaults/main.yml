@@ -2,13 +2,13 @@
 rbenv:
   env: system
   version: v0.4.0
-  ruby_version: 2.2.0
+  ruby_version: 2.2.3
 
 rbenv_repo: "https://github.com/sstephenson/rbenv.git"
 
 rbenv_plugins:
   - { name: "rbenv-vars",         repo: "https://github.com/sstephenson/rbenv-vars.git",         version: "v1.2.0" }
-  - { name: "ruby-build",         repo: "https://github.com/sstephenson/ruby-build.git",         version: "v20150818" }
+  - { name: "ruby-build",         repo: "https://github.com/sstephenson/ruby-build.git",         version: "v20151028" }
   - { name: "rbenv-default-gems", repo: "https://github.com/sstephenson/rbenv-default-gems.git", version: "v1.0.0" }
   - { name: "rbenv-installer",    repo: "https://github.com/fesplugas/rbenv-installer.git",      version: "22cc96aa45d06faca5958b1aa1688596198407a3" }
   - { name: "rbenv-update",       repo: "https://github.com/rkh/rbenv-update.git",               version: "bf757453498337807a46e24074d29173f1a8abec" }
