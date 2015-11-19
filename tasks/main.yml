@@ -153,11 +153,21 @@
   tags:
     - rbenv
 
+- name: check if current system ruby version is {{ rbenv.ruby_version }}
+  shell: $SHELL -lc "rbenv version | cut -d ' ' -f 1 | grep -Fx '{{ rbenv.ruby_version }}'"
+  register: ruby_selected
+  changed_when: false
+  ignore_errors: yes
+  always_run: yes
+  when: rbenv.env == "system"
+  tags:
+    - rbenv
+
 - name: set ruby {{ rbenv.ruby_version }} for system
   shell: bash -lc "rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
   when:
     - rbenv.env == "system"
-    - ruby_installed.rc != 0
+    - ruby_selected.rc != 0
   tags:
     - rbenv
 
@@ -186,12 +196,25 @@
   tags:
     - rbenv
 
+- name: check if user ruby version is {{ rbenv.ruby_version }}
+  shell: $SHELL -lc "rbenv version | cut -d ' ' -f 1 | grep -Fx '{{ rbenv.ruby_version }}'"
+  sudo: true
+  sudo_user: "{{ item }}"
+  with_items: rbenv_users
+  when: not "system" == "{{ rbenv.env }}"
+  register: ruby_selected
+  changed_when: false
+  ignore_errors: yes
+  always_run: yes
+  tags:
+    - rbenv
+
 - name: set ruby {{ rbenv.ruby_version }} for select users
   shell: $SHELL -lc "rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
   sudo: true
   sudo_user: "{{ item[1] }}"
   with_together:
-    - ruby_installed.results
+    - ruby_selected.results
     - rbenv_users
   when: (not "system" == "{{ rbenv.env }}") and (item[0].rc != 0)
   ignore_errors: true
