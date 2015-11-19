@@ -51,7 +51,7 @@
   with_items: rbenv_users
   sudo: true
   sudo_user: "{{ item }}"
-  when: not "system" == "{{ rbenv.env }}"
+  when: rbenv.env != "system"
   ignore_errors: true
   tags:
     - rbenv
@@ -61,7 +61,7 @@
   with_items: rbenv_users
   sudo: true
   sudo_user: "{{ item }}"
-  when: not "system" == "{{ rbenv.env }}"
+  when: rbenv.env != "system"
   ignore_errors: true
   tags:
     - rbenv
@@ -78,7 +78,7 @@
     - rbenv_plugins
   sudo: true
   sudo_user: "{{ item[0] }}"
-  when: not "system" == "{{ rbenv.env }}"
+  when: rbenv.env != "system"
   ignore_errors: true
   tags:
     - rbenv
@@ -120,7 +120,7 @@
   with_items: rbenv_users
   sudo: true
   sudo_user: "{{ item }}"
-  when: not "system" == "{{ rbenv.env }}"
+  when: rbenv.env != "system"
   ignore_errors: true
   tags:
     - rbenv
@@ -130,7 +130,7 @@
   with_items: rbenv_users
   sudo: true
   sudo_user: "{{ item }}"
-  when: not "system" == "{{ rbenv.env }}"
+  when: rbenv.env != "system"
   ignore_errors: true
   tags:
     - rbenv
@@ -176,7 +176,7 @@
   sudo: true
   sudo_user: "{{ item }}"
   with_items: rbenv_users
-  when: not "system" == "{{ rbenv.env }}"
+  when: rbenv.env != "system"
   register: ruby_installed
   changed_when: false
   ignore_errors: yes
@@ -187,11 +187,11 @@
 - name: install ruby {{ rbenv.ruby_version }} for select users
   shell: $SHELL -lc "rbenv install {{ rbenv.ruby_version }}"
   sudo: true
-  sudo_user: "{{ item[1] }}"
-  with_together:
-    - ruby_installed.results
-    - rbenv_users
-  when: (not "system" == "{{ rbenv.env }}") and (item[0].rc != 0)
+  sudo_user: "{{ item }}"
+  with_items: rbenv_users
+  when:
+    - rbenv.env != "system"
+    - ruby_installed.rc != 0
   ignore_errors: true
   tags:
     - rbenv
@@ -201,7 +201,7 @@
   sudo: true
   sudo_user: "{{ item }}"
   with_items: rbenv_users
-  when: not "system" == "{{ rbenv.env }}"
+  when: rbenv.env != "system"
   register: ruby_selected
   changed_when: false
   ignore_errors: yes
@@ -212,11 +212,11 @@
 - name: set ruby {{ rbenv.ruby_version }} for select users
   shell: $SHELL -lc "rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
   sudo: true
-  sudo_user: "{{ item[1] }}"
-  with_together:
-    - ruby_selected.results
-    - rbenv_users
-  when: (not "system" == "{{ rbenv.env }}") and (item[0].rc != 0)
+  sudo_user: "{{ item }}"
+  with_items: rbenv_users
+  when:
+    - rbenv.env != "system"
+    - ruby_selected.rc != 0
   ignore_errors: true
   tags:
     - rbenv
