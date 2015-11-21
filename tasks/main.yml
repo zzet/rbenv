@@ -187,11 +187,13 @@
 - name: install ruby {{ rbenv.ruby_version }} for select users
   shell: $SHELL -lc "rbenv install {{ rbenv.ruby_version }}"
   sudo: true
-  sudo_user: "{{ item }}"
-  with_items: rbenv_users
+  sudo_user: "{{ item[1] }}"
+  with_together:
+    - ruby_installed.results
+    - rbenv_users
   when:
     - rbenv.env != "system"
-    - ruby_installed.rc != 0
+    - item[0].rc != 0
   ignore_errors: true
   tags:
     - rbenv
@@ -212,11 +214,13 @@
 - name: set ruby {{ rbenv.ruby_version }} for select users
   shell: $SHELL -lc "rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
   sudo: true
-  sudo_user: "{{ item }}"
-  with_items: rbenv_users
+  sudo_user: "{{ item[1] }}"
+  with_together:
+    - ruby_selected.results
+    - rbenv_users
   when:
     - rbenv.env != "system"
-    - ruby_selected.rc != 0
+    - item[0].rc != 0
   ignore_errors: true
   tags:
     - rbenv
