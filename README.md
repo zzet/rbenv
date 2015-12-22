@@ -72,6 +72,7 @@ Description:
 Example:
 
     - hosts: web
+      gather_facts: true # https://github.com/zzet/ansible-rbenv-role/issues/37
       vars:
         rbenv:
           env: user
