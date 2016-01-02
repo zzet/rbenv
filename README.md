@@ -31,8 +31,8 @@ Default variables are:
           version: "v1.2.0" }
 
       - { name: "ruby-build",
-          repo: "https://github.com/sstephenson/ruby-build.git",
-          version: "v20151028" }
+          repo: "https://github.com/rbenv/ruby-build.git",
+          version: "v20151230" }
 
       - { name: "rbenv-default-gems",
           repo: "https://github.com/sstephenson/rbenv-default-gems.git",
