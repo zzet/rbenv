@@ -1,6 +1,6 @@
 - name: update apt cache
   apt: update_cache=yes
-  sudo: true
+  become: true
   tags:
     - rbenv
 
@@ -16,7 +16,7 @@
     - libxml2-dev
     - libxslt1-dev
     - zlib1g-dev
-  sudo: true
+  become: true
   tags:
     - rbenv
 

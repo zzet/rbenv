@@ -10,7 +10,7 @@ provisioner:
   require_ansible_repo: true
   ansible_verbose: true
   ansible_verbosity: 1
-  sudo: true
+  become: true
   extra_vars:
     rbenv:
       env: system
