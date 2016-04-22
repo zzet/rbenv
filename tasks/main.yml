@@ -36,7 +36,7 @@
     version={{ item.version }}
     accept_hostkey=true
     force=yes
-  with_items: rbenv_plugins
+  with_items: "{{ rbenv_plugins }}"
   when: rbenv.env == "system"
   tags:
     - rbenv
@@ -48,7 +48,7 @@
     version={{ rbenv.version }}
     accept_hostkey=true
     force=yes
-  with_items: rbenv_users
+  with_items: "{{ rbenv_users }}"
   become: true
   become_user: "{{ item }}"
   when: rbenv.env != "system"
@@ -58,7 +58,7 @@
 
 - name: create plugins directory for selected users
   file: state=directory path={{ rbenv_root }}/plugins
-  with_items: rbenv_users
+  with_items: "{{ rbenv_users }}"
   become: true
   become_user: "{{ item }}"
   when: rbenv.env != "system"
@@ -74,8 +74,8 @@
     accept_hostkey=true
     force=yes
   with_nested:
-    - rbenv_users
-    - rbenv_plugins
+    - "{{ rbenv_users }}"
+    - "{{ rbenv_plugins }}"
   become: true
   become_user: "{{ item[0] }}"
   when: rbenv.env != "system"
@@ -93,7 +93,7 @@
 
 - name: set default-gems for select users
   copy: src=default-gems dest={{ rbenv_root }}/default-gems
-  with_items: rbenv_users
+  with_items: "{{ rbenv_users }}"
   become: true
   become_user: "{{ item }}"
   when:
@@ -105,7 +105,7 @@
 
 - name: set custom default-gems for select users
   copy: src={{ default_gems_file }} dest={{ rbenv_root }}/default-gems
-  with_items: rbenv_users
+  with_items: "{{ rbenv_users }}"
   become: true
   become_user: "{{ item }}"
   when:
@@ -117,7 +117,7 @@
 
 - name: set gemrc for select users
   copy: src=gemrc dest=~/.gemrc
-  with_items: rbenv_users
+  with_items: "{{ rbenv_users }}"
   become: true
   become_user: "{{ item }}"
   when: rbenv.env != "system"
@@ -127,7 +127,7 @@
 
 - name: set vars for select users
   copy: src=vars dest={{ rbenv_root }}/vars
-  with_items: rbenv_users
+  with_items: "{{ rbenv_users }}"
   become: true
   become_user: "{{ item }}"
   when: rbenv.env != "system"
@@ -175,7 +175,7 @@
   shell: $SHELL -lc "rbenv versions | grep {{ rbenv.ruby_version }}"
   become: true
   become_user: "{{ item }}"
-  with_items: rbenv_users
+  with_items: "{{ rbenv_users }}"
   when: rbenv.env != "system"
   register: ruby_installed
   changed_when: false
@@ -189,8 +189,8 @@
   become: true
   become_user: "{{ item[1] }}"
   with_together:
-    - ruby_installed.results
-    - rbenv_users
+    - "{{ ruby_installed.results }}"
+    - "{{ rbenv_users }}"
   when:
     - rbenv.env != "system"
     - item[0].rc != 0
@@ -202,7 +202,7 @@
   shell: $SHELL -lc "rbenv version | cut -d ' ' -f 1 | grep -Fx '{{ rbenv.ruby_version }}'"
   become: true
   become_user: "{{ item }}"
-  with_items: rbenv_users
+  with_items: "{{ rbenv_users }}"
   when: rbenv.env != "system"
   register: ruby_selected
   changed_when: false
@@ -216,8 +216,8 @@
   become: true
   become_user: "{{ item[1] }}"
   with_together:
-    - ruby_selected.results
-    - rbenv_users
+    - "{{ ruby_selected.results }}"
+    - "{{ rbenv_users }}"
   when:
     - rbenv.env != "system"
     - item[0].rc != 0
