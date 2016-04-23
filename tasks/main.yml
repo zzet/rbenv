@@ -13,6 +13,7 @@
 
 
 - name: checkout rbenv_repo for system
+  become: yes
   git: >
     repo={{ rbenv_repo }}
     dest={{ rbenv_root }}
@@ -24,12 +25,14 @@
     - rbenv
 
 - name: create plugins directory for system
+  become: yes
   file: state=directory path={{ rbenv_root }}/plugins
   when: rbenv.env == "system"
   tags:
     - rbenv
 
 - name: install plugins for system
+  become: yes
   git: >
     repo={{ item.repo }}
     dest={{ rbenv_root }}/plugins/{{ item.name }}
