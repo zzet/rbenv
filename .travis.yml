@@ -12,4 +12,3 @@ script:
   - ansible-playbook -i inventory role.yml --connection=local --sudo -vvvv
 os:
   - linux
-  - osx
