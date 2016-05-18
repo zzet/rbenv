@@ -58,6 +58,11 @@ Default variables are:
 
     rbenv_users: []
 
+Variables to control a system installation (these are not set by default):
+
+    rbenv_owner: 'deploy'
+    rbenv_group: 'deploy'
+
 Description:
 
 - ` rbenv.env ` - Type of rbenv installation. Allows 'system' or 'user' values
@@ -68,6 +73,8 @@ Description:
 - ` rbenv_root ` - Install path
 - ` rbenv_users ` - Array of usernames for multiuser install. User must be present in the system
 - ` default_gems_file ` - This is Rbenv's plugin _rbenv-default-gems_. Sets the path to a default-gems file of your choice (_don't set it_ if you want to use the default file `files/default-gems`)
+- ` rbenv_owner ` - The user  owning `rbenv_root` when `rbenv.env` is `system`
+- ` rbenv_group ` - The group owning `rbenv_root` when `rbenv.env` is `system`
 
 Example:
 
