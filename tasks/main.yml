@@ -11,9 +11,12 @@
 - include: homebrew_build_depends.yml
   when: ansible_os_family == 'Darwin'
 
+- name: set rbenv_owner
+  set_fact: 'rbenv_owner={{ rbenv_owner | default("root", true) }}'
 
 - name: checkout rbenv_repo for system
   become: yes
+  become_user: '{{ rbenv_owner }}'
   git: >
     repo={{ rbenv_repo }}
     dest={{ rbenv_root }}
@@ -26,6 +29,7 @@
 
 - name: create plugins directory for system
   become: yes
+  become_user: '{{ rbenv_owner }}'
   file: state=directory path={{ rbenv_root }}/plugins
   when: rbenv.env == "system"
   tags:
@@ -33,6 +37,7 @@
 
 - name: install plugins for system
   become: yes
+  become_user: '{{ rbenv_owner }}'
   git: >
     repo={{ item.repo }}
     dest={{ rbenv_root }}/plugins/{{ item.name }}
@@ -41,6 +46,39 @@
     force=yes
   with_items: "{{ rbenv_plugins }}"
   when: rbenv.env == "system"
+  tags:
+    - rbenv
+
+- name: Set group ownership of content under rbenv_root
+  shell:
+    find '{{ rbenv_root }}'
+      \( -iname ".git" -prune \) -o
+      ! -group '{{ item }}'
+      -exec chgrp -v '{{ item }}' {} + | head -n 1
+  become: yes
+  with_items: '{{ rbenv_group }}'
+  when:
+    - rbenv.env == "system"
+    - rbenv_group is defined
+    - rbenv_group != None
+  register: rbenv_chgrp
+  changed_when: '"changed group" in rbenv_chgrp.stdout'
+  tags:
+    - rbenv
+
+- name: Set group permissions of content under rbenv_root
+  shell:
+    find '{{ rbenv_root }}'
+      \( -iname ".git" -prune \) -o
+      -type d ! -perm -g+s
+      -exec chmod -v g+rwxs {} + | head -n 1
+  become: yes
+  when:
+    - rbenv.env == "system"
+    - rbenv_group is defined
+    - rbenv_group != None
+  register: rbenv_chmod
+  changed_when: '"changed from" in rbenv_chmod.stdout'
   tags:
     - rbenv
 
