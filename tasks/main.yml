@@ -128,7 +128,7 @@
   template: src=rbenv.sh.j2 dest=/etc/profile.d/rbenv.sh owner=root group=root mode=0755
   become: yes
   when:
-    - ansible_os_family != 'OpenBSD'
+    - ansible_os_family != 'OpenBSD' and ansible_os_family != 'Darwin'
   tags:
     - rbenv
 
