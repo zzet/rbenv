@@ -14,6 +14,16 @@
 - name: set rbenv_owner
   set_fact: 'rbenv_owner={{ rbenv_owner | default("root", true) }}'
 
+# Added this task to ensure my user exists first
+- name: ensure my user exists first
+  user: name={{ rbenv_owner }}
+  become: yes
+
+# Added this task so that the play would not fail due to permissions issues with non-root user
+- name: create directory and fix permissions
+  file: name={{ rbenv_root }} state=directory owner={{ rbenv_owner }} group={{ rbenv_owner }}
+  become: yes
+
 - name: checkout rbenv_repo for system
   become: yes
   become_user: '{{ rbenv_owner }}'
@@ -127,6 +137,26 @@
 - name: add rbenv initialization to profile system-wide
   template: src=rbenv.sh.j2 dest=/etc/profile.d/rbenv.sh owner=root group=root mode=0755
   become: yes
+  when:
+    - ansible_os_family != 'OpenBSD' and ansible_os_family != 'Darwin'
+  tags:
+    - rbenv
+
+#- name: add rbenv path to our user
+#  blockinfile:
+#    dest: /home/{{ rbenv_owner }}/.bashrc
+#    block: "{{ lookup('template', 'rbenv.sh.j2') }}"
+#  become: yes
+#  when:
+#    - ansible_os_family != 'OpenBSD' and ansible_os_family != 'Darwin'
+#  tags:
+#    - rbenv
+
+# Fixed this by becoming correct user and file
+- name: add rbenv initialization lines to profile user
+  template: src=rbenv.sh.j2 dest=/home/{{ rbenv_owner }}/.bashrc
+  become: yes
+  become_user: "{{ rbenv_owner }}"
   when:
     - ansible_os_family != 'OpenBSD' and ansible_os_family != 'Darwin'
   tags:
@@ -271,3 +301,8 @@
   ignore_errors: yes
   tags:
     - rbenv
+
+# Added this task so the gems directory is owned by the profile user
+- name: fix permissions for profile user
+  file: name={{ rbenv_root }} state=directory owner={{ rbenv_owner }} group={{ rbenv_owner }} recurse=yes
+  become: yes
