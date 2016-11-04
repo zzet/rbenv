@@ -176,6 +176,21 @@
   tags:
     - rbenv
 
+- name: set tmp directory path
+  set_fact: rbenv_tmpdir="{{ lookup('env', 'TMPDIR') }}"
+  when: rbenv_tmpdir is undefined
+  tags:
+    - rbenv
+
+- name: ensure tmp directory is present
+  file: state=directory path={{ rbenv_root }}/{{ rbenv_tmpdir }}
+  with_items: "{{ rbenv_users }}"
+  become: yes
+  become_user: "{{ item }}"
+  ignore_errors: yes
+  tags:
+    - rbenv
+
 - name: check ruby {{ rbenv.ruby_version }} installed for system
   shell: $SHELL -lc "rbenv versions | grep {{ rbenv.ruby_version }}"
   register: ruby_installed
@@ -193,6 +208,8 @@
   when:
     - rbenv.env == "system"
     - ruby_installed.rc != 0
+  environment:
+    TMPDIR: "{{ rbenv_tmpdir }}"
   tags:
     - rbenv
 
@@ -241,6 +258,8 @@
     - rbenv.env != "system"
     - item[0].rc != 0
   ignore_errors: yes
+  environment:
+    TMPDIR: "{{ rbenv_tmpdir }}"
   tags:
     - rbenv
 
