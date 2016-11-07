@@ -197,7 +197,7 @@
   changed_when: false
   ignore_errors: yes
   failed_when: false
-  always_run: yes
+  check_mode: no
   when: rbenv.env == "system"
   tags:
     - rbenv
@@ -219,7 +219,7 @@
   changed_when: false
   ignore_errors: yes
   failed_when: false
-  always_run: yes
+  check_mode: no
   when: rbenv.env == "system"
   tags:
     - rbenv
@@ -243,7 +243,7 @@
   changed_when: false
   ignore_errors: yes
   failed_when: false
-  always_run: yes
+  check_mode: no
   tags:
     - rbenv
 
@@ -273,7 +273,7 @@
   changed_when: false
   ignore_errors: yes
   failed_when: false
-  always_run: yes
+  check_mode: no
   tags:
     - rbenv
 
