@@ -6,6 +6,8 @@
   when: ansible_pkg_mgr == 'apt'
 - include: yum_build_depends.yml
   when: ansible_pkg_mgr == 'yum'
+- include: dnf_build_depends.yml
+  when: ansible_pkg_mgr == 'dnf'
 # - include: pacman_build_depends.yml # Arch Linux
 #   when: ansible_pkg_mgr == 'pacman'
 - include: homebrew_build_depends.yml

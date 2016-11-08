@@ -1,0 +1,14 @@
+---
+- name: install build depends
+  dnf: name={{ item }} state=present
+  with_items:
+    - gcc
+    - openssl-devel
+    - libyaml-devel
+    - readline-devel
+    - zlib-devel
+    - libffi-devel
+    - git
+  become: true
+  tags:
+    - rbenv
