@@ -20,6 +20,9 @@ galaxy_info:
         - saucy    # 13.10
         - trusty   # 14.04
         # - utopic   # 14.10
+    - name: Fedora
+      versions:
+        - 24
   categories:
     - development
     - system
