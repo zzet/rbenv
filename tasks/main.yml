@@ -1,37 +1,37 @@
 ---
-- name: include env vars
-  include_vars: "{{ rbenv.env }}.yml"
+- block:
+  - name: include env vars
+    include_vars: "{{ rbenv.env }}.yml"
 
-- include: apt_build_depends.yml
-  when: ansible_pkg_mgr == 'apt'
-- include: yum_build_depends.yml
-  when: ansible_pkg_mgr == 'yum'
-- include: dnf_build_depends.yml
-  when: ansible_pkg_mgr == 'dnf'
-# - include: pacman_build_depends.yml # Arch Linux
-#   when: ansible_pkg_mgr == 'pacman'
-- include: homebrew_build_depends.yml
-  when: ansible_os_family == 'Darwin'
+  - include: apt_build_depends.yml
+    when: ansible_pkg_mgr == 'apt'
+  - include: yum_build_depends.yml
+    when: ansible_pkg_mgr == 'yum'
+  - include: dnf_build_depends.yml
+    when: ansible_pkg_mgr == 'dnf'
+  # - include: pacman_build_depends.yml # Arch Linux
+  #   when: ansible_pkg_mgr == 'pacman'
+  - include: homebrew_build_depends.yml
+    when: ansible_os_family == 'Darwin'
 
-- name: set rbenv_owner
-  set_fact: 'rbenv_owner={{ rbenv_owner | default("root", true) }}'
+  - name: set rbenv_owner
+    set_fact: 'rbenv_owner={{ rbenv_owner | default("root", true) }}'
 
-- name: set tmp directory path
-  set_fact: rbenv_tmpdir="{{ lookup('env', 'TMPDIR') }}"
-  when: rbenv_tmpdir is undefined
+  - name: set tmp directory path
+    set_fact: rbenv_tmpdir="{{ lookup('env', 'TMPDIR') }}"
+    when: rbenv_tmpdir is undefinedv
+
+  - name: ensure tmp directory is present
+    file: state=directory path={{ rbenv_root }}/{{ rbenv_tmpdir }}
+    with_items: "{{ rbenv_users }}"
+    become: yes
+    become_user: "{{ item }}"
+    ignore_errors: yes
+
+  - include: system_install.yml
+    when: rbenv.env == "system"
+
+  - include: user_install.yml
+    when: rbenv.env != "system"
   tags:
     - rbenv
-
-- name: ensure tmp directory is present
-  file: state=directory path={{ rbenv_root }}/{{ rbenv_tmpdir }}
-  with_items: "{{ rbenv_users }}"
-  become: yes
-  become_user: "{{ item }}"
-  ignore_errors: yes
-  tags:
-    - rbenv
-
-- include: system_install.yml
-  when: rbenv.env == "system"
-- include: user_install.yml
-  when: rbenv.env != "system"
