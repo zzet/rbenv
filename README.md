@@ -21,7 +21,7 @@ Default variables are:
     rbenv:
       env: system
       version: v1.0.0
-      ruby_version: 2.3.1
+      ruby_version: 2.3.3
 
     rbenv_repo: "https://github.com/rbenv/rbenv.git"
 
@@ -32,7 +32,7 @@ Default variables are:
 
       - { name: "ruby-build",
           repo: "https://github.com/rbenv/ruby-build.git",
-          version: "v20160426" }
+          version: "v20161121" }
 
       - { name: "rbenv-default-gems",
           repo: "https://github.com/rbenv/rbenv-default-gems.git",
