@@ -46,6 +46,14 @@
   tags:
     - rbenv
 
+- name: add rbenv initialization to profile system-wide
+  blockinfile: block="{{ lookup('template', 'rbenv_user.sh.j2') }}" dest=/etc/profile
+  become: yes
+  when:
+    - ansible_os_family == 'Darwin'
+  tags:
+    - rbenv
+
 - name: set default-gems for select users
   copy: src=default-gems dest={{ rbenv_root }}/default-gems
   with_items: "{{ rbenv_users }}"
