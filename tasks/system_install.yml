@@ -1,4 +1,13 @@
 ---
+- name: ensure tmp directory is present
+  file: state=directory path={{ rbenv_root }}/{{ rbenv_tmpdir }}
+  with_items: "{{ rbenv_users }}"
+  become: yes
+  become_user: "{{ item }}"
+  ignore_errors: yes
+  tags:
+    - rbenv
+
 - name: checkout rbenv_repo for system
   become: yes
   become_user: '{{ rbenv_owner }}'

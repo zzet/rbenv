@@ -87,7 +87,7 @@
     - rbenv
 
 - name: check ruby {{ rbenv.ruby_version }} installed for select users
-  shell: $SHELL -lc "rbenv versions | grep {{ rbenv.ruby_version }}"
+  shell: $SHELL -lc "{{ rbenv_root }}/bin/rbenv versions | grep {{ rbenv.ruby_version }}"
   become: yes
   become_user: "{{ item }}"
   with_items: "{{ rbenv_users }}"
@@ -100,7 +100,7 @@
     - rbenv
 
 - name: install ruby {{ rbenv.ruby_version }} for select users
-  shell: $SHELL -lc "rbenv install {{ rbenv.ruby_version }}"
+  shell: $SHELL -lc "{{ rbenv_root }}/bin/rbenv install {{ rbenv.ruby_version }}"
   become: yes
   become_user: "{{ item[1] }}"
   with_together:
@@ -115,7 +115,7 @@
     - rbenv
 
 - name: check if user ruby version is {{ rbenv.ruby_version }}
-  shell: $SHELL -lc "rbenv version | cut -d ' ' -f 1 | grep -Fx '{{ rbenv.ruby_version }}'"
+  shell: $SHELL -lc "{{ rbenv_root }}/bin/rbenv version | cut -d ' ' -f 1 | grep -Fx '{{ rbenv.ruby_version }}'"
   become: yes
   become_user: "{{ item }}"
   with_items: "{{ rbenv_users }}"
@@ -128,7 +128,7 @@
     - rbenv
 
 - name: set ruby {{ rbenv.ruby_version }} for select users
-  shell: $SHELL -lc "rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
+  shell: $SHELL -lc "{{ rbenv_root }}/bin/rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
   become: yes
   become_user: "{{ item[1] }}"
   with_together:

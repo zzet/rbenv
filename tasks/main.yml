@@ -22,15 +22,6 @@
   tags:
     - rbenv
 
-- name: ensure tmp directory is present
-  file: state=directory path={{ rbenv_root }}/{{ rbenv_tmpdir }}
-  with_items: "{{ rbenv_users }}"
-  become: yes
-  become_user: "{{ item }}"
-  ignore_errors: yes
-  tags:
-    - rbenv
-
 - include: system_install.yml
   when: rbenv.env == "system"
 - include: user_install.yml
