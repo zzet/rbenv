@@ -17,7 +17,7 @@
   set_fact: 'rbenv_owner={{ rbenv_owner | default("root", true) }}'
 
 - name: set tmp directory path
-  set_fact: rbenv_tmpdir="{{ lookup('env', 'TMPDIR') }}"
+  set_fact: rbenv_tmpdir="{{ ansible_env.TMPDIR | default('/tmp') }}"
   when: rbenv_tmpdir is undefined
   tags:
     - rbenv
