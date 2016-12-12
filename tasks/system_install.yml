@@ -46,7 +46,7 @@
       ! -group '{{ item }}'
       -exec chgrp -v '{{ item }}' {} + | head -n 1
   become: yes
-  with_items: '{{ rbenv_group }}'
+  with_items: '{{ rbenv_group | default([]) }}'
   when:
     - rbenv_group is defined
     - rbenv_group != None
