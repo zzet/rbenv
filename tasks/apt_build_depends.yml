@@ -1,8 +1,6 @@
 - name: update apt cache
   apt: update_cache=yes
   become: true
-  tags:
-    - rbenv
 
 - name: install build depends
   apt: pkg={{ item }} state=present install_recommends=no
@@ -17,6 +15,3 @@
     - libxslt1-dev
     - zlib1g-dev
   become: true
-  tags:
-    - rbenv
-
