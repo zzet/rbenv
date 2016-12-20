@@ -70,28 +70,32 @@
   tags:
     - rbenv
 
-- name: check ruby {{ rbenv.ruby_version }} installed for system
-  shell: $SHELL -lc "rbenv versions | grep {{ rbenv.ruby_version }}"
+- name: check ruby versions installed for system
+  shell: $SHELL -lc "rbenv versions | grep {{ item.version }}"
   register: ruby_installed
   changed_when: false
+  with_items: '{{ rbenv.rubies }}'
   ignore_errors: yes
   failed_when: false
   check_mode: no
   tags:
     - rbenv
 
-- name: install ruby {{ rbenv.ruby_version }} for system
-  shell: bash -lc "rbenv install {{ rbenv.ruby_version }}"
+- name: install ruby versions for system
+  shell: bash -lc "rbenv install {{ item[1].version }}"
   become: yes
+  with_nested:
+    - '{{ ruby_installed.results }}'
+    - '{{ rbenv.rubies }}'
   when:
-    - ruby_installed.rc != 0
-  environment:
-    TMPDIR: "{{ rbenv_tmpdir }}"
+    - item[0].rc != 0
+    - item[0].item.version == item[1].version
+  environment: "{{ item[1].env | default({}) | combine({ 'TMPDIR': rbenv_tmpdir }) }}"
   tags:
     - rbenv
 
-- name: check if current system ruby version is {{ rbenv.ruby_version }}
-  shell: $SHELL -lc "rbenv version | cut -d ' ' -f 1 | grep -Fx '{{ rbenv.ruby_version }}'"
+- name: check if current system ruby version is {{ rbenv.default_ruby }}
+  shell: $SHELL -lc "rbenv version | cut -d ' ' -f 1 | grep -Fx '{{ rbenv.default_ruby }}'"
   register: ruby_selected
   changed_when: false
   ignore_errors: yes
@@ -100,9 +104,9 @@
   tags:
     - rbenv
 
-- name: set ruby {{ rbenv.ruby_version }} for system
+- name: set ruby {{ rbenv.default_ruby }} for system
   become: yes
-  shell: bash -lc "rbenv global {{ rbenv.ruby_version }} && rbenv rehash"
+  shell: bash -lc "rbenv global {{ rbenv.default_ruby }} && rbenv rehash"
   when:
     - ruby_selected.rc != 0
   tags:
