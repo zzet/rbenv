@@ -108,7 +108,7 @@
     - rbenv
 
 - name: install ruby {{ rbenv.ruby_version }} for select users
-  shell: $SHELL -lc "{{ rbenv_root }}/bin/rbenv install {{ rbenv.ruby_version }}"
+  shell: $SHELL -lc "CONFIGURE_OPTS='--disable-install-rdoc' {{ rbenv_root }}/bin/rbenv install {{ rbenv.ruby_version }}"
   become: yes
   become_user: "{{ item[1] }}"
   with_together:

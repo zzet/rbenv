@@ -81,7 +81,7 @@
     - rbenv
 
 - name: install ruby {{ rbenv.ruby_version }} for system
-  shell: bash -lc "rbenv install {{ rbenv.ruby_version }}"
+  shell: bash -lc "CONFIGURE_OPTS='--disable-install-rdoc' rbenv install {{ rbenv.ruby_version }}"
   become: yes
   when:
     - ruby_installed.rc != 0
