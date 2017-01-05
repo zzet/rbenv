@@ -19,8 +19,6 @@
 - name: set tmp directory path
   set_fact: rbenv_tmpdir="{{ ansible_env.TMPDIR | default('/tmp') }}"
   when: rbenv_tmpdir is undefined
-  tags:
-    - rbenv
 
 - include: system_install.yml
   when: rbenv.env == "system"

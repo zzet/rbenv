@@ -8,15 +8,11 @@
     version={{ rbenv.version }}
     accept_hostkey=yes
     force=yes
-  tags:
-    - rbenv
 
 - name: create plugins directory for system
   become: yes
   become_user: '{{ rbenv_owner }}'
   file: state=directory path={{ rbenv_root }}/plugins
-  tags:
-    - rbenv
 
 - name: install plugins for system
   become: yes
@@ -28,16 +24,12 @@
     accept_hostkey=yes
     force=yes
   with_items: "{{ rbenv_plugins }}"
-  tags:
-    - rbenv
 
 - name: add rbenv initialization to profile system-wide
   template: src=rbenv_system.sh.j2 dest=/etc/profile.d/rbenv.sh owner=root group=root mode=0755
   become: yes
   when:
     - ansible_os_family != 'OpenBSD' and ansible_os_family != 'Darwin'
-  tags:
-    - rbenv
 
 - name: Set group ownership of content under rbenv_root
   shell:
@@ -52,8 +44,6 @@
     - rbenv_group != None
   register: rbenv_chgrp
   changed_when: '"changed group" in rbenv_chgrp.stdout'
-  tags:
-    - rbenv
 
 - name: Set group permissions of content under rbenv_root
   shell:
@@ -67,8 +57,6 @@
     - rbenv_group != None
   register: rbenv_chmod
   changed_when: '"changed from" in rbenv_chmod.stdout'
-  tags:
-    - rbenv
 
 - name: check ruby versions installed for system
   shell: $SHELL -lc "rbenv versions | grep {{ item.version }}"
@@ -78,8 +66,6 @@
   ignore_errors: yes
   failed_when: false
   check_mode: no
-  tags:
-    - rbenv
 
 - name: install ruby versions for system
   shell: bash -lc "rbenv install {{ item[1].version }}"
@@ -91,8 +77,6 @@
     - item[0].rc != 0
     - item[0].item.version == item[1].version
   environment: "{{ item[1].env | default({}) | combine({ 'TMPDIR': rbenv_tmpdir }) }}"
-  tags:
-    - rbenv
 
 - name: check if current system ruby version is {{ rbenv.default_ruby }}
   shell: $SHELL -lc "rbenv version | cut -d ' ' -f 1 | grep -Fx '{{ rbenv.default_ruby }}'"
@@ -101,13 +85,9 @@
   ignore_errors: yes
   failed_when: false
   check_mode: no
-  tags:
-    - rbenv
 
 - name: set ruby {{ rbenv.default_ruby }} for system
   become: yes
   shell: bash -lc "rbenv global {{ rbenv.default_ruby }} && rbenv rehash"
   when:
     - ruby_selected.rc != 0
-  tags:
-    - rbenv
