@@ -10,8 +10,6 @@
   become: yes
   become_user: "{{ item }}"
   ignore_errors: yes
-  tags:
-    - rbenv
 
 - name: create plugins directory for selected users
   file: state=directory path={{ rbenv_root }}/plugins
@@ -19,8 +17,6 @@
   become: yes
   become_user: "{{ item }}"
   ignore_errors: yes
-  tags:
-    - rbenv
 
 - name: install plugins for selected users
   git: >
@@ -35,24 +31,18 @@
   become: yes
   become_user: "{{ item[0] }}"
   ignore_errors: yes
-  tags:
-    - rbenv
 
 - name: add rbenv initialization to profile system-wide
   template: src=rbenv_user.sh.j2 dest=/etc/profile.d/rbenv.sh owner=root group=root mode=0755
   become: yes
   when:
     - ansible_os_family != 'OpenBSD' and ansible_os_family != 'Darwin'
-  tags:
-    - rbenv
 
 - name: add rbenv initialization to profile system-wide
   blockinfile: block="{{ lookup('template', 'rbenv_user.sh.j2') }}" dest=/etc/profile
   become: yes
   when:
     - ansible_os_family == 'Darwin'
-  tags:
-    - rbenv
 
 - name: set default-gems for select users
   copy: src=default-gems dest={{ rbenv_root }}/default-gems
@@ -62,8 +52,6 @@
   when:
     - default_gems_file is not defined
   ignore_errors: yes
-  tags:
-    - rbenv
 
 - name: set custom default-gems for select users
   copy: src={{ default_gems_file }} dest={{ rbenv_root }}/default-gems
@@ -73,8 +61,6 @@
   when:
     - default_gems_file is defined
   ignore_errors: yes
-  tags:
-    - rbenv
 
 - name: set gemrc for select users
   copy: src=gemrc dest=~/.gemrc
@@ -82,8 +68,6 @@
   become: yes
   become_user: "{{ item }}"
   ignore_errors: yes
-  tags:
-    - rbenv
 
 - name: set vars for select users
   copy: src=vars dest={{ rbenv_root }}/vars
@@ -91,8 +75,6 @@
   become: yes
   become_user: "{{ item }}"
   ignore_errors: yes
-  tags:
-    - rbenv
 
 - name: check ruby versions installed for select users
   shell: $SHELL -lc "{{ rbenv_root }}/bin/rbenv versions | grep {{ item[1].version }}"
@@ -106,8 +88,6 @@
   ignore_errors: yes
   failed_when: false
   check_mode: no
-  tags:
-    - rbenv
 
 - name: install ruby {{ item[2].version }} for select users
   shell: $SHELL -lc "{{ rbenv_root }}/bin/rbenv install {{ item[2].version }}"
@@ -123,8 +103,6 @@
     - item[0].item[1].version == item[2].version
   ignore_errors: yes
   environment: "{{ item[2].env | default({}) | combine({ 'TMPDIR': rbenv_tmpdir }) }}"
-  tags:
-    - rbenv
 
 - name: check if user ruby version is {{ rbenv.default_ruby }}
   shell: $SHELL -lc "{{ rbenv_root }}/bin/rbenv version | cut -d ' ' -f 1 | grep -Fx '{{ rbenv.default_ruby }}'"
@@ -136,8 +114,6 @@
   ignore_errors: yes
   failed_when: false
   check_mode: no
-  tags:
-    - rbenv
 
 - name: set ruby {{ rbenv.default_ruby }} for select users
   shell: $SHELL -lc "{{ rbenv_root }}/bin/rbenv global {{ rbenv.default_ruby }} && rbenv rehash"
@@ -149,5 +125,3 @@
   when:
     - item[0].rc != 0
   ignore_errors: yes
-  tags:
-    - rbenv

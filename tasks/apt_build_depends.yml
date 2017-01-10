@@ -2,8 +2,6 @@
   apt: update_cache=yes cache_valid_time=86400
   become: true
   changed_when: false
-  tags:
-    - rbenv
 
 - name: install build depends
   apt: pkg={{ item }} state=present install_recommends=no
@@ -18,5 +16,3 @@
     - libxslt1-dev
     - zlib1g-dev
   become: true
-  tags:
-    - rbenv

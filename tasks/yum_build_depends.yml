@@ -10,6 +10,4 @@
     - libffi-devel
     - git
   become: true
-  tags:
-    - rbenv
 
