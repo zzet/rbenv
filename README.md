@@ -113,5 +113,3 @@ Author Information
 ------------------
 
 [Andrew Kumanyaev](http://github.com/zzet)
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/zzet/ansible-rbenv-role/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
