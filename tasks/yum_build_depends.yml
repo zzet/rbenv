@@ -2,12 +2,12 @@
 - name: install build depends
   yum: name={{ item }} state=present
   with_items:
+    - bzip2
     - gcc
-    - openssl-devel
+    - git
+    - libffi-devel
     - libyaml-devel
+    - openssl-devel
     - readline-devel
     - zlib-devel
-    - libffi-devel
-    - git
   become: true
-
