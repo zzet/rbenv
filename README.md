@@ -59,6 +59,8 @@ Default variables are:
     rbenv_root: "{% if rbenv.env == 'system' %}/usr/local/rbenv{% else %}$HOME/.rbenv{% endif %}"
 
     rbenv_users: []
+    
+    rbenv_extra_depends: []
 
 Variables to control a system installation (these are not set by default):
 
@@ -75,6 +77,7 @@ Description:
 - ` rbenv_plugins ` - Array of Hashes with information about plugins to install
 - ` rbenv_root ` - Install path
 - ` rbenv_users ` - Array of usernames for multiuser install. User must be present in the system
+- ` rbenv_extra_depends` - Array of extra system packages to install before compiling rubies
 - ` default_gems_file ` - This is Rbenv's plugin _rbenv-default-gems_. Sets the path to a default-gems file of your choice (_don't set it_ if you want to use the default file `files/default-gems`)
 - ` rbenv_owner ` - The user  owning `rbenv_root` when `rbenv.env` is `system`
 - ` rbenv_group ` - The group owning `rbenv_root` when `rbenv.env` is `system`
@@ -94,6 +97,12 @@ Example:
           - version: 2.2.4
             env:
               RUBY_CONFIGURE_OPTS: "--enable-shared"
+          - version: 2.3.4
+            env:
+              RUBY_CONFIGURE_OPTS: "--enable-shared --with-jemalloc"
+          rbenv_extra_depends:
+            - libjemalloc1
+            - libjemalloc-dev
       roles:
         - role: zzet.rbenv
           rbenv_users:

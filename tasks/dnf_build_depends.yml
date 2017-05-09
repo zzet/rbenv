@@ -10,3 +10,8 @@
     - libffi-devel
     - git
   become: true
+
+- name: install build depends
+  dnf: name={{ item }} state=present
+  with_items: '{{ rbenv_extra_depends }}'
+  become: true

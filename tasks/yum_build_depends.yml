@@ -11,3 +11,8 @@
     - readline-devel
     - zlib-devel
   become: true
+
+- name: install extra build depends
+  yum: name={{ item }} state=present
+  with_items: '{{ rbenv_extra_depends }}'
+  become: true
