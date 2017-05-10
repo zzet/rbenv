@@ -17,6 +17,11 @@
     - zlib1g-dev
   become: true
 
+- name: install extra build depends
+  apt: pkg={{ item }} state=present install_recommends=no
+  with_items: '{{ rbenv_extra_depends }}'
+  become: true
+
 - shell: "echo '{{ rbenv.rubies | map(attribute='version') | join(' ') }}' | grep '1.8.7'"
   ignore_errors: yes
   register: ruby_version_1_8_7
