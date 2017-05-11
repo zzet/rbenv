@@ -25,6 +25,8 @@
 - shell: "echo '{{ rbenv.rubies | map(attribute='version') | join(' ') }}' | grep '1.8.7'"
   ignore_errors: yes
   register: ruby_version_1_8_7
+  check_mode: no
+  changed_when: false
 
 - name: Install packages required to build Ruby 1.8.7
   apt:
