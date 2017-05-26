@@ -6,6 +6,8 @@ rbenv:
   rubies:
     - version: 2.3.3
 
+rbenv_clean_up: false
+
 rbenv_repo: "https://github.com/rbenv/rbenv.git"
 
 rbenv_plugins:
