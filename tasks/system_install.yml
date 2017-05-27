@@ -78,6 +78,26 @@
     - item[1].version not in item[0].stdout_lines
   environment: "{{ item[1].env | default({}) | combine({ 'TMPDIR': rbenv_tmpdir }) }}"
 
+- name: check which old rubies to remove for system
+  set_fact:
+    drop_ruby: "{{ '{'+item[0].stdout_lines|list|difference(item[1])|join(',')+'}'}}"
+  become: yes
+  with_nested:
+    - "{{ rbenv_versions.results }}"
+    - "{{ rbenv.rubies|map(attribute='version')|list }}"
+  when:
+    - rbenv_clean_up
+    - item[0].stdout_lines|list != item[1]
+  register: removable_rubies
+  ignore_errors: yes
+
+- name: remove old rubies
+  shell: $SHELL -lc "rm -rf {{ rbenv_root }}/versions/{{ ansible_facts.drop_ruby }}"
+  changed_when: false
+  become: yes
+  when: rbenv_clean_up
+  ignore_errors: yes
+
 - name: check if current system ruby version is {{ rbenv.default_ruby }}
   shell: $SHELL -lc "rbenv version | cut -d ' ' -f 1 | grep -Fx '{{ rbenv.default_ruby }}'"
   register: ruby_selected
