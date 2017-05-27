@@ -59,10 +59,10 @@
   changed_when: '"changed from" in rbenv_chmod.stdout'
 
 - name: check ruby versions installed for system
-  shell: $SHELL -lc "rbenv versions | grep {{ item.version }}"
-  register: ruby_installed
+  shell: $SHELL -lc "rbenv versions --bare"
+  register: rbenv_versions
+  with_items: rbenv.rubies
   changed_when: false
-  with_items: '{{ rbenv.rubies }}'
   ignore_errors: yes
   failed_when: false
   check_mode: no
@@ -71,11 +71,11 @@
   shell: bash -lc "rbenv install {{ item[1].version }}"
   become: yes
   with_nested:
-    - '{{ ruby_installed.results }}'
+    - '{{ rbenv_versions.results }}'
     - '{{ rbenv.rubies }}'
   when:
-    - item[0].rc != 0
-    - item[0].item.version == item[1].version
+    - item[0].rc == 0
+    - item[1].version not in item[0].stdout_lines
   environment: "{{ item[1].env | default({}) | combine({ 'TMPDIR': rbenv_tmpdir }) }}"
 
 - name: check if current system ruby version is {{ rbenv.default_ruby }}
