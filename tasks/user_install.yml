@@ -77,13 +77,11 @@
   ignore_errors: yes
 
 - name: check ruby versions installed for select users
-  shell: $SHELL -lc "{{ rbenv_root }}/bin/rbenv versions | grep {{ item[1].version }}"
+  shell: $SHELL -lc "{{ rbenv_root }}/bin/rbenv versions --bare"
+  with_items: "{{ rbenv_users }}"
   become: yes
-  become_user: "{{ item[0] }}"
-  with_nested:
-    - "{{ rbenv_users }}"
-    - "{{ rbenv.rubies }}"
-  register: ruby_installed
+  become_user: "{{ item }}"
+  register: rbenv_versions
   changed_when: false
   ignore_errors: yes
   failed_when: false
@@ -94,13 +92,13 @@
   become: yes
   become_user: "{{ item[1] }}"
   with_nested:
-    - "{{ ruby_installed.results }}"
+    - "{{ rbenv_versions.results }}"
     - "{{ rbenv_users }}"
     - "{{ rbenv.rubies }}"
   when:
-    - item[0].rc != 0
+    - item[0].rc == 0
     - item[0].item[0] == item[1]
-    - item[0].item[1].version == item[2].version
+    - item[2].version not in item[0].stdout_lines
   ignore_errors: yes
   environment: "{{ item[2].env | default({}) | combine({ 'TMPDIR': rbenv_tmpdir }) }}"
 
