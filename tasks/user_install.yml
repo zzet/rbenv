@@ -102,6 +102,33 @@
   ignore_errors: yes
   environment: "{{ item[2].env | default({}) | combine({ 'TMPDIR': rbenv_tmpdir }) }}"
 
+- name: check which old rubies to remove for select users
+  set_fact:
+    drop_ruby:
+      - "{{ item[1] }}"
+      - "{{ '{'+item[0].stdout_lines|list|difference(item[2])|join(',')+'}'}}"
+  become: yes
+  become_user: "{{ item[1] }}"
+  with_nested:
+    - "{{ ruby_installed.results }}"
+    - "{{ rbenv_users }}"
+    - "{{ rbenv.rubies|map(attribute='version')|list }}"
+  when:
+    - rbenv_clean_up
+    - item[0].item[0] == item[1]
+    - item[0].stdout_lines|list != item[2]
+  register: removable_rubies
+  ignore_errors: yes
+
+- name: remove old rubies
+  shell: $SHELL -lc "rm -rf {{ rbenv_root }}/versions/{{ item.ansible_facts.drop_ruby[1] }}"
+  changed_when: false
+  become: yes
+  become_user: "{{ item.ansible_facts.drop_ruby[0] }}"
+  with_items: "{{ removable_rubies.results }}"
+  when: rbenv_clean_up
+  ignore_errors: yes
+
 - name: check if user ruby version is {{ rbenv.default_ruby }}
   shell: $SHELL -lc "{{ rbenv_root }}/bin/rbenv version | cut -d ' ' -f 1 | grep -Fx '{{ rbenv.default_ruby }}'"
   become: yes
