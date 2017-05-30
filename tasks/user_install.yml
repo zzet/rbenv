@@ -97,7 +97,7 @@
     - "{{ rbenv.rubies }}"
   when:
     - item[0].rc == 0
-    - item[0].item[0] == item[1]
+    - item[0].item == item[1]
     - item[2].version not in item[0].stdout_lines
   ignore_errors: yes
   environment: "{{ item[2].env | default({}) | combine({ 'TMPDIR': rbenv_tmpdir }) }}"
