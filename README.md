@@ -40,7 +40,7 @@ Default variables are:
 
       - { name: "rbenv-default-gems",
           repo: "https://github.com/rbenv/rbenv-default-gems.git",
-          version: "v1.0.0" }
+          version: "master" }
 
       - { name: "rbenv-installer",
           repo: "https://github.com/rbenv/rbenv-installer.git",
