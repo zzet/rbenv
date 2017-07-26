@@ -24,3 +24,30 @@ rbenv_root: "{% if rbenv.env == 'system' %}/usr/local/rbenv{% else %}~/.rbenv{% 
 rbenv_users: []
 
 rbenv_extra_depends: []
+rbenv_apt_packages:
+- build-essential
+- git
+- libcurl4-openssl-dev
+- libffi-dev
+- libreadline-dev
+- libssl-dev
+- libxml2-dev
+- libxslt1-dev
+- zlib1g-dev
+rbenv_dnf_packages:
+- gcc
+- openssl-devel
+- libyaml-devel
+- readline-devel
+- zlib-devel
+- libffi-devel
+- git
+rbenv_yum_packages:
+- bzip2
+- gcc
+- git
+- libffi-devel
+- libyaml-devel
+- openssl-devel
+- readline-devel
+- zlib-devel
