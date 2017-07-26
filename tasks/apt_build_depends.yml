@@ -22,11 +22,11 @@
   with_items: '{{ rbenv_extra_depends }}'
   become: true
 
-- shell: "echo '{{ rbenv.rubies | map(attribute='version') | join(' ') }}' | grep '1.8.7'"
-  ignore_errors: yes
-  register: ruby_version_1_8_7
-  check_mode: no
-  changed_when: false
+- name: Create the list of ruby versions.
+  set_fact:
+    rbenv_ruby_versions: "{{ rbenv_ruby_versions | default([]) }} + {{ [item.version] }}"
+  with_items:
+  - "{{ rbenv.rubies }}"
 
 - name: Install packages required to build Ruby 1.8.7
   apt:
@@ -36,4 +36,4 @@
     - bison
     - autoconf
     - subversion
-  when: ruby_version_1_8_7.rc == 0
+  when: "'1.8.7' in rbenv_ruby_versions"
