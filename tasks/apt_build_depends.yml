@@ -6,15 +6,7 @@
 - name: install build depends
   apt: pkg={{ item }} state=present install_recommends=no
   with_items:
-    - build-essential
-    - git
-    - libcurl4-openssl-dev
-    - libffi-dev
-    - libreadline-dev
-    - libssl-dev
-    - libxml2-dev
-    - libxslt1-dev
-    - zlib1g-dev
+  - "{{ rbenv_apt_packages }}"
   become: true
 
 - name: install extra build depends
