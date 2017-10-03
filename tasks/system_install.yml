@@ -68,15 +68,11 @@
   check_mode: no
 
 - name: install ruby versions for system
-  shell: bash -lc "rbenv install {{ item[1].version }}"
+  shell: bash -lc "rbenv install --skip-existing {{ item.version }}"
   become: yes
-  with_nested:
-    - '{{ rbenv_versions.results }}'
+  with_items:
     - '{{ rbenv.rubies }}'
-  when:
-    - item[0].rc == 0
-    - item[1].version not in item[0].stdout_lines
-  environment: "{{ item[1].env | default({}) | combine({ 'TMPDIR': rbenv_tmpdir }) }}"
+  environment: "{{ item.env | default({}) | combine({ 'TMPDIR': rbenv_tmpdir }) }}"
 
 - name: check which old rubies to remove for system
   set_fact:
