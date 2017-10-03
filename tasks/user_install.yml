@@ -87,20 +87,15 @@
   failed_when: false
   check_mode: no
 
-- name: install ruby {{ item[2].version }} for select users
-  shell: $SHELL -lc "{{ rbenv_root }}/bin/rbenv install {{ item[2].version }}"
+- name: install ruby {{ item[1].version }} for select users
+  shell: $SHELL -lc "{{ rbenv_root }}/bin/rbenv install --skip-existing {{ item[1].version }}"
   become: yes
-  become_user: "{{ item[1] }}"
+  become_user: "{{ item[0] }}"
   with_nested:
-    - "{{ rbenv_versions.results }}"
     - "{{ rbenv_users }}"
     - "{{ rbenv.rubies }}"
-  when:
-    - item[0].rc == 0
-    - item[0].item == item[1]
-    - item[2].version not in item[0].stdout_lines
   ignore_errors: yes
-  environment: "{{ item[2].env | default({}) | combine({ 'TMPDIR': rbenv_tmpdir }) }}"
+  environment: "{{ item[1].env | default({}) | combine({ 'TMPDIR': rbenv_tmpdir }) }}"
 
 - name: check which old rubies to remove for select users
   set_fact:
