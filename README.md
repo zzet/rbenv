@@ -32,7 +32,7 @@ Default variables are:
     rbenv_plugins:
       - { name: "rbenv-vars",
           repo: "https://github.com/rbenv/rbenv-vars.git",
-          version: "v1.2.0" }
+          version: "master" }
 
       - { name: "ruby-build",
           repo: "https://github.com/rbenv/ruby-build.git",
@@ -52,11 +52,11 @@ Default variables are:
 
       - { name: "rbenv-whatis",
           repo: "https://github.com/rkh/rbenv-whatis.git",
-          version: "v1.0.0" }
+          version: "master" }
 
       - { name: "rbenv-use",
           repo: "https://github.com/rkh/rbenv-use.git",
-          version: "v1.0.0" }
+          version: "master" }
 
     rbenv_root: "{% if rbenv.env == 'system' %}/usr/local/rbenv{% else %}$HOME/.rbenv{% endif %}"
 
