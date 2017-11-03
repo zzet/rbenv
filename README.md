@@ -21,9 +21,9 @@ Default variables are:
     rbenv:
       env: system
       version: v1.0.0
-      default_ruby: 2.3.3
+      default_ruby: 2.4.2
       rubies:
-        - version: 2.3.3
+        - version: 2.4.2
 
     rbenv_clean_up: false
 
@@ -40,15 +40,15 @@ Default variables are:
 
       - { name: "rbenv-default-gems",
           repo: "https://github.com/rbenv/rbenv-default-gems.git",
-          version: "v1.0.0" }
+          version: "master" }
 
       - { name: "rbenv-installer",
           repo: "https://github.com/rbenv/rbenv-installer.git",
-          version: "bc21e7055dcc8f5f9bc66ce0c78cc9ae0c28cd7a" }
+          version: "master" }
 
       - { name: "rbenv-update",
           repo: "https://github.com/rkh/rbenv-update.git",
-          version: "1961fa180280bb50b64cbbffe6a5df7cf70f5e50" }
+          version: "master" }
 
       - { name: "rbenv-whatis",
           repo: "https://github.com/rkh/rbenv-whatis.git",
@@ -61,7 +61,7 @@ Default variables are:
     rbenv_root: "{% if rbenv.env == 'system' %}/usr/local/rbenv{% else %}$HOME/.rbenv{% endif %}"
 
     rbenv_users: []
-    
+
     rbenv_extra_depends: []
 
 Variables to control a system installation (these are not set by default):
@@ -74,7 +74,7 @@ Description:
 - ` rbenv.env ` - Type of rbenv installation. Allows 'system' or 'user' values
 - ` rbenv.version ` - Version of rbenv to install (tag from [rbenv releases page](https://github.com/sstephenson/rbenv/releases))
 - ` rbenv.default_ruby ` - Which ruby version to be set as global rbenv ruby.
-- ` rbenv.rubies ` - Versions of ruby to install. This is an array of hashes. E.g. `[ { version: 2.3.3, env: { RUBY_CONFIGURE_OPTS="--enable-shared" } } ]`
+- ` rbenv.rubies ` - Versions of ruby to install. This is an array of hashes. E.g. `[ { version: 2.4.2, env: { RUBY_CONFIGURE_OPTS="--enable-shared" } } ]`
 - ` rbenv_clean_up ` - Delete all ruby versions not listed above. Default value is `false`
 - ` rbenv_repo ` - Repository with source code of rbenv to install
 - ` rbenv_plugins ` - Array of Hashes with information about plugins to install
