@@ -36,13 +36,13 @@
   template: src=rbenv_user.sh.j2 dest=/etc/profile.d/rbenv.sh owner=root group=root mode=0755
   become: yes
   when:
-    - ansible_os_family != 'OpenBSD' and ansible_os_family != 'Darwin'
+    - (ansible_os_family != 'OpenBSD' and ansible_os_family != 'Darwin') and rbenv_user_profile
 
 - name: add rbenv initialization to profile system-wide
   blockinfile: block="{{ lookup('template', 'rbenv_user.sh.j2') }}" dest=/etc/profile
   become: yes
   when:
-    - ansible_os_family == 'Darwin'
+    - ansible_os_family == 'Darwin' and rbenv_user_profile
 
 - name: set default-gems for select users
   copy: src=default-gems dest={{ rbenv_root }}/default-gems
