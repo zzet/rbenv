@@ -51,3 +51,4 @@ rbenv_yum_packages:
 - openssl-devel
 - readline-devel
 - zlib-devel
+rbenv_user_profile: true
