@@ -11,7 +11,8 @@
 
 - name: install extra build depends
   apt: pkg={{ item }} state=present install_recommends=no
-  with_items: '{{ rbenv_extra_depends }}'
+  with_items:
+  - "{{ rbenv_extra_depends }}"
   become: true
 
 - name: Create the list of ruby versions.
