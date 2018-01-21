@@ -9,6 +9,6 @@ install:
 script:
   - echo localhost > inventory
   - ansible-playbook --syntax-check -i inventory role.yml
-  - ansible-playbook -i inventory role.yml --connection=local --sudo -vvvv
+  - ansible-playbook -i inventory role.yml --connection=local --become -vvvv
 os:
   - linux
