@@ -103,9 +103,9 @@ Example:
           - version: 2.3.4
             env:
               RUBY_CONFIGURE_OPTS: "--enable-shared --with-jemalloc"
-          rbenv_extra_depends:
-            - libjemalloc1
-            - libjemalloc-dev
+        rbenv_extra_depends:
+          - libjemalloc1
+          - libjemalloc-dev
       roles:
         - role: zzet.rbenv
           rbenv_users:
