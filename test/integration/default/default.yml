@@ -1,0 +1,6 @@
+---
+- hosts: test-kitchen
+  user: root
+
+  roles:
+    - ansible-rbenv-role
