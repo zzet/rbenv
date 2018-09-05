@@ -26,6 +26,7 @@ rbenv_users: []
 rbenv_extra_depends: []
 rbenv_apt_packages:
 - build-essential
+- curl
 - git
 - libcurl4-openssl-dev
 - libffi-dev
@@ -35,6 +36,7 @@ rbenv_apt_packages:
 - libxslt1-dev
 - zlib1g-dev
 rbenv_dnf_packages:
+- curl
 - gcc
 - openssl-devel
 - libyaml-devel
@@ -44,6 +46,7 @@ rbenv_dnf_packages:
 - git
 rbenv_yum_packages:
 - bzip2
+- curl
 - gcc
 - git
 - libffi-devel
