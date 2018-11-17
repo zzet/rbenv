@@ -85,6 +85,7 @@ Description:
 - ` rbenv_owner ` - The user  owning `rbenv_root` when `rbenv.env` is `system`
 - ` rbenv_group ` - The group owning `rbenv_root` when `rbenv.env` is `system`
 - ` rbenv_tmpdir ` - A temporary directory path used for artifacts when installing rubies. Defaults to system's `$TMPDIR`
+- ` rbenv_set_vars ` - Set default vars `GEM_PATH=$GEM_PATH:$HOME/.gems` for 'user' env. Default value is `true`
 
 Example:
 

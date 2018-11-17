@@ -21,6 +21,8 @@ rbenv_plugins:
 
 rbenv_root: "{% if rbenv.env == 'system' %}/usr/local/rbenv{% else %}~/.rbenv{% endif %}"
 
+rbenv_set_vars: true
+
 rbenv_users: []
 
 rbenv_extra_depends: []
