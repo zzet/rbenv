@@ -74,6 +74,8 @@
   with_items: "{{ rbenv_users }}"
   become: yes
   become_user: "{{ item }}"
+  when:
+    - rbenv_set_vars
   ignore_errors: yes
 
 - name: check ruby versions installed for select users
