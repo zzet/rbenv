@@ -12,12 +12,12 @@
   homebrew_tap:
     tap: homebrew/dupes
     state: present
-  when: "{{ item.version | version_compare('1.9.3-p0', '<=') }}"
+  when: item.version is version('1.9.3-p0', '<=')
   with_items: "{{ rbenv.rubies }}"
 
 - name: Install apple-gcc42 with homebrew for ruby <= 1.9.3
   homebrew:
     name: apple-gcc42
     state: present
-  when: "{{ item.version | version_compare('1.9.3-p0', '<=') }}"
+  when: item.version is version('1.9.3-p0', '<=')
   with_items: "{{ rbenv.rubies }}"
