@@ -1,30 +1,32 @@
 ---
 - name: checkout rbenv_repo for selected users
-  git: >
-    repo={{ rbenv_repo }}
-    dest={{ rbenv_root }}
-    version={{ rbenv.version }}
-    accept_hostkey=yes
-    force=yes
+  git:
+    repo: '{{ rbenv_repo }}'
+    dest: '{{ rbenv_root }}'
+    version: '{{ rbenv.version }}'
+    accept_hostkey: yes
+    force: yes
   with_items: "{{ rbenv_users }}"
   become: yes
   become_user: "{{ item }}"
   ignore_errors: yes
 
 - name: create plugins directory for selected users
-  file: state=directory path={{ rbenv_root }}/plugins
+  file:
+    state: directory
+    path: '{{ rbenv_root }}/plugins'
   with_items: "{{ rbenv_users }}"
   become: yes
   become_user: "{{ item }}"
   ignore_errors: yes
 
 - name: install plugins for selected users
-  git: >
-    repo={{ item[1].repo }}
-    dest={{ rbenv_root }}/plugins/{{ item[1].name }}
-    version={{ item[1].version }}
-    accept_hostkey=yes
-    force=yes
+  git:
+    repo: '{{ item[1].repo }}'
+    dest: '{{ rbenv_root }}/plugins/{{ item[1].name }}'
+    version: '{{ item[1].version }}'
+    accept_hostkey: yes
+    force: yes
   with_nested:
     - "{{ rbenv_users }}"
     - "{{ rbenv_plugins }}"
@@ -33,19 +35,28 @@
   ignore_errors: yes
 
 - name: add rbenv initialization to profile system-wide
-  template: src=rbenv_user.sh.j2 dest=/etc/profile.d/rbenv.sh owner=root group=root mode=0755
+  template:
+    src: rbenv_user.sh.j2
+    dest: /etc/profile.d/rbenv.sh
+    owner: root
+    group: root
+    mode: 0755
   become: yes
   when:
     - (ansible_os_family != 'OpenBSD' and ansible_os_family != 'Darwin') and rbenv_user_profile
 
 - name: add rbenv initialization to profile system-wide
-  blockinfile: block="{{ lookup('template', 'rbenv_user.sh.j2') }}" dest=/etc/profile
+  blockinfile:
+    block: "{{ lookup('template', 'rbenv_user.sh.j2') }}"
+    dest: /etc/profile
   become: yes
   when:
     - ansible_os_family == 'Darwin' and rbenv_user_profile
 
 - name: set default-gems for select users
-  copy: src=default-gems dest={{ rbenv_root }}/default-gems
+  copy:
+    src: default-gems
+    dest: '{{ rbenv_root }}/default-gems'
   with_items: "{{ rbenv_users }}"
   become: yes
   become_user: "{{ item }}"
@@ -54,7 +65,9 @@
   ignore_errors: yes
 
 - name: set custom default-gems for select users
-  copy: src={{ default_gems_file }} dest={{ rbenv_root }}/default-gems
+  copy:
+    src: '{{ default_gems_file }}'
+    dest: '{{ rbenv_root }}/default-gems'
   with_items: "{{ rbenv_users }}"
   become: yes
   become_user: "{{ item }}"
@@ -63,14 +76,18 @@
   ignore_errors: yes
 
 - name: set gemrc for select users
-  copy: src=gemrc dest=~/.gemrc
+  copy:
+    src: gemrc
+    dest: ~/.gemrc
   with_items: "{{ rbenv_users }}"
   become: yes
   become_user: "{{ item }}"
   ignore_errors: yes
 
 - name: set vars for select users
-  copy: src=vars dest={{ rbenv_root }}/vars
+  copy:
+    src: vars
+    dest: '{{ rbenv_root }}/vars'
   with_items: "{{ rbenv_users }}"
   become: yes
   become_user: "{{ item }}"
@@ -103,7 +120,7 @@
   set_fact:
     drop_ruby:
       - "{{ item[1] }}"
-      - "{{ '{'+item[0].stdout_lines|list|difference(item[2])|join(',')+'}'}}"
+      - "{{ '{'+item[0].stdout_lines|list|difference(item[2])|join(',')+'}' }}"
   become: yes
   become_user: "{{ item[1] }}"
   with_nested:

@@ -23,7 +23,7 @@ galaxy_info:
     - name: Fedora
       versions:
         - 24
-  categories:
+  galaxy_tags:
     - development
     - system
 

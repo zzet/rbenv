@@ -14,13 +14,16 @@
   when: ansible_os_family == 'Darwin'
 
 - name: set rbenv_owner
-  set_fact: 'rbenv_owner={{ rbenv_owner | default("root", true) }}'
+  set_fact:
+    rbenv_owner: '{{ rbenv_owner | default("root", true) }}'
 
 - name: set tmp directory path
-  set_fact: rbenv_tmpdir="{{ ansible_env.TMPDIR | default('/tmp') }}"
+  set_fact:
+    rbenv_tmpdir: "{{ ansible_env.TMPDIR | default('/tmp') }}"
   when: rbenv_tmpdir is undefined
 
 - import_tasks: system_install.yml
   when: rbenv.env == "system"
+
 - import_tasks: user_install.yml
   when: rbenv.env != "system"

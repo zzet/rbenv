@@ -1,14 +1,23 @@
 ---
-- homebrew: name={{ item }} state=present
+- name: Install dependencies with homebrew
+  homebrew:
+    name: "{{ item }}"
+    state: present
   with_items:
     - openssl
     - libyaml
 
 # required for building Ruby <= 1.9.3-p0
-- homebrew_tap: tap=homebrew/dupes state=present
+- name: Install homebrew/dupes for ruby <= 1.9.3 with homebrew_tap
+  homebrew_tap:
+    tap: homebrew/dupes
+    state: present
   when: "{{ item.version | version_compare('1.9.3-p0', '<=') }}"
   with_items: "{{ rbenv.rubies }}"
 
-- homebrew: name=apple-gcc42 state=present
+- name: Install apple-gcc42 with homebrew for ruby <= 1.9.3
+  homebrew:
+    name: apple-gcc42
+    state: present
   when: "{{ item.version | version_compare('1.9.3-p0', '<=') }}"
   with_items: "{{ rbenv.rubies }}"

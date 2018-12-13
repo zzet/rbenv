@@ -1,2 +1,6 @@
 ---
-- pacman: name=base-devel state=present update_cache=yes
+- name: Pacman build depends
+  pacman:
+    name: base-devel
+    state: present
+    update_cache: yes

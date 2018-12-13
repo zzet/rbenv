@@ -2,31 +2,38 @@
 - name: checkout rbenv_repo for system
   become: yes
   become_user: '{{ rbenv_owner }}'
-  git: >
-    repo={{ rbenv_repo }}
-    dest={{ rbenv_root }}
-    version={{ rbenv.version }}
-    accept_hostkey=yes
-    force=yes
+  git:
+    repo: '{{ rbenv_repo }}'
+    dest: '{{ rbenv_root }}'
+    version: '{{ rbenv.version }}'
+    accept_hostkey: yes
+    force: yes
 
 - name: create plugins directory for system
   become: yes
   become_user: '{{ rbenv_owner }}'
-  file: state=directory path={{ rbenv_root }}/plugins
+  file:
+    state: directory
+    path: '{{ rbenv_root }}/plugins'
 
 - name: install plugins for system
   become: yes
   become_user: '{{ rbenv_owner }}'
-  git: >
-    repo={{ item.repo }}
-    dest={{ rbenv_root }}/plugins/{{ item.name }}
-    version={{ item.version }}
-    accept_hostkey=yes
-    force=yes
+  git:
+    repo: '{{ item.repo }}'
+    dest: '{{ rbenv_root }}/plugins/{{ item.name }}'
+    version: '{{ item.version }}'
+    accept_hostkey: yes
+    force: yes
   with_items: "{{ rbenv_plugins }}"
 
 - name: add rbenv initialization to profile system-wide
-  template: src=rbenv_system.sh.j2 dest=/etc/profile.d/rbenv.sh owner=root group=root mode=0755
+  template:
+    src: rbenv_system.sh.j2
+    dest: /etc/profile.d/rbenv.sh
+    owner: root
+    group: root
+    mode: 0755
   become: yes
   when:
     - ansible_os_family != 'OpenBSD' and ansible_os_family != 'Darwin'
@@ -61,7 +68,7 @@
 - name: check ruby versions installed for system
   shell: $SHELL -lc "rbenv versions --bare"
   register: rbenv_versions
-  with_items: rbenv.rubies
+  with_items: '{{ rbenv.rubies }}'
   changed_when: false
   ignore_errors: yes
   failed_when: false
@@ -76,7 +83,7 @@
 
 - name: check which old rubies to remove for system
   set_fact:
-    drop_ruby: "{{ '{'+item[0].stdout_lines|list|difference(item[1])|join(',')+'}'}}"
+    drop_ruby: "{{ '{'+item[0].stdout_lines|list|difference(item[1])|join(',')+'}' }}"
   become: yes
   with_nested:
     - "{{ rbenv_versions.results }}"

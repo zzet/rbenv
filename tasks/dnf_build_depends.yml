@@ -1,12 +1,16 @@
 ---
 - name: install build depends
-  dnf: name={{ item }} state=present
+  dnf:
+    name: "{{ item }}"
+    state: present
   with_items:
-  - "{{ rbenv_dnf_packages }}"
+    - "{{ rbenv_dnf_packages }}"
   become: true
 
 - name: install build depends
-  dnf: name={{ item }} state=present
+  dnf:
+    name: "{{ item }}"
+    state: present
   with_items:
-  - "{{ rbenv_extra_depends }}"
+    - "{{ rbenv_extra_depends }}"
   become: true
