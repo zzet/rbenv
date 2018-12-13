@@ -75,7 +75,7 @@
   check_mode: no
 
 - name: install ruby versions for system
-  shell: bash -lc "rbenv install --skip-existing {{ item.version }}"
+  shell: $SHELL -lc "rbenv install --skip-existing {{ item.version }}"
   become: yes
   with_items:
     - '{{ rbenv.rubies }}'
