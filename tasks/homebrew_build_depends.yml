@@ -1,9 +1,10 @@
 ---
 - name: Install dependencies with homebrew
   homebrew:
-    name: "{{ item }}"
+    name: "{{ packages }}"
     state: present
-  with_items:
+  vars:
+    packages:
     - openssl
     - libyaml
 

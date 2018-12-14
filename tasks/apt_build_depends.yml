@@ -1,3 +1,4 @@
+---
 - name: update apt cache
   apt:
     update_cache: yes
@@ -7,20 +8,16 @@
 
 - name: install build depends
   apt:
-    pkg: "{{ item }}"
+    pkg: "{{ rbenv_apt_packages }}"
     state: present
     install_recommends: no
-  with_items:
-    - "{{ rbenv_apt_packages }}"
   become: true
 
 - name: install extra build depends
   apt:
-    pkg: "{{ item }}"
+    pkg: "{{ rbenv_extra_depends }}"
     state: present
     install_recommends: no
-  with_items:
-    - "{{ rbenv_extra_depends }}"
   become: true
 
 - name: Create the list of ruby versions.
@@ -31,9 +28,10 @@
 
 - name: Install packages required to build Ruby 1.8.7
   apt:
-    name: "{{ item }}"
+    name: "{{ packages }}"
     state: present
-  with_items:
+  vars:
+    packages:
     - bison
     - autoconf
     - subversion
