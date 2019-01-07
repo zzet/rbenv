@@ -9,7 +9,6 @@
   with_items: "{{ rbenv_users }}"
   become: yes
   become_user: "{{ item }}"
-  ignore_errors: yes
 
 - name: create plugins directory for selected users
   file:
@@ -18,7 +17,6 @@
   with_items: "{{ rbenv_users }}"
   become: yes
   become_user: "{{ item }}"
-  ignore_errors: yes
 
 - name: install plugins for selected users
   git:
@@ -32,7 +30,6 @@
     - "{{ rbenv_plugins }}"
   become: yes
   become_user: "{{ item[0] }}"
-  ignore_errors: yes
 
 - name: add rbenv initialization to profile system-wide
   template:
@@ -62,7 +59,6 @@
   become_user: "{{ item }}"
   when:
     - default_gems_file is not defined
-  ignore_errors: yes
 
 - name: set custom default-gems for select users
   copy:
@@ -73,7 +69,6 @@
   become_user: "{{ item }}"
   when:
     - default_gems_file is defined
-  ignore_errors: yes
 
 - name: set gemrc for select users
   copy:
@@ -82,7 +77,6 @@
   with_items: "{{ rbenv_users }}"
   become: yes
   become_user: "{{ item }}"
-  ignore_errors: yes
 
 - name: set vars for select users
   copy:
@@ -93,7 +87,6 @@
   become_user: "{{ item }}"
   when:
     - rbenv_set_vars
-  ignore_errors: yes
 
 - name: check ruby versions installed for select users
   shell: $SHELL -lc "{{ rbenv_root }}/bin/rbenv versions --bare"
@@ -102,7 +95,6 @@
   become_user: "{{ item }}"
   register: rbenv_versions
   changed_when: false
-  ignore_errors: yes
   failed_when: false
   check_mode: no
 
@@ -113,7 +105,6 @@
   with_nested:
     - "{{ rbenv_users }}"
     - "{{ rbenv.rubies }}"
-  ignore_errors: yes
   environment: "{{ item[1].env | default({}) | combine({ 'TMPDIR': rbenv_tmpdir }) }}"
 
 - name: check which old rubies to remove for select users
@@ -132,7 +123,6 @@
     - item[0].item[0] == item[1]
     - item[0].stdout_lines|list != item[2]
   register: removable_rubies
-  ignore_errors: yes
 
 - name: remove old rubies
   shell: $SHELL -lc "rm -rf {{ rbenv_root }}/versions/{{ item.ansible_facts.drop_ruby[1] }}"
@@ -141,7 +131,6 @@
   become_user: "{{ item.ansible_facts.drop_ruby[0] }}"
   with_items: "{{ removable_rubies.results }}"
   when: rbenv_clean_up
-  ignore_errors: yes
 
 - name: check if user ruby version is {{ rbenv.default_ruby }}
   shell: $SHELL -lc "{{ rbenv_root }}/bin/rbenv version | cut -d ' ' -f 1 | grep -Fx '{{ rbenv.default_ruby }}'"
@@ -150,7 +139,6 @@
   with_items: "{{ rbenv_users }}"
   register: ruby_selected
   changed_when: false
-  ignore_errors: yes
   failed_when: false
   check_mode: no
 
@@ -163,4 +151,3 @@
     - "{{ rbenv_users }}"
   when:
     - item[0].rc != 0
-  ignore_errors: yes
