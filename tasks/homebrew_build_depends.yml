@@ -1,11 +1,10 @@
 ---
 - name: Install dependencies with homebrew
   homebrew:
-    name: "{{ item }}"
+    name:
+      - openssl
+      - libyaml
     state: present
-  with_items:
-    - openssl
-    - libyaml
 
 # required for building Ruby <= 1.9.3-p0
 - name: Install homebrew/dupes for ruby <= 1.9.3 with homebrew_tap
