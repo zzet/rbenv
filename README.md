@@ -24,11 +24,11 @@ Default variables are:
 ```yml
     rbenv_install: system
     rbenv_version: v1.0.0
+    rbenv_default_ruby: 2.4.2
 
     rbenv:
-      default_ruby: 2.4.2
       rubies:
-        - version: 2.4.2
+        - version: "{{ rbenv_default_ruby }}"
 
     rbenv_clean_up: false
 
@@ -85,7 +85,7 @@ Description:
 - `rbenv_version` - Version of rbenv to install (tag from [rbenv releases
   page](https://github.com/sstephenson/rbenv/releases) or other valid git
   object ref)
-- `rbenv.default_ruby` - Which ruby version to be set as global rbenv ruby.
+- `rbenv_default_ruby` - Which ruby version to be set as global rbenv ruby.
 - `rbenv.rubies` - Versions of ruby to install. This is an array of hashes.
    E.g. `[ { version: 2.4.2, env: { RUBY_CONFIGURE_OPTS="--enable-shared" } } ]`
 - `rbenv_clean_up ` - Delete all ruby versions not listed above.
@@ -115,10 +115,10 @@ Example:
       vars:
         rbenv_install: user
         rbenv_version: v0.4.0
+        rbenv_default_ruby: 2.0.0-p353
         rbenv:
-          default_ruby: 2.0.0-p353
           rubies:
-          - version: 2.0.0-p353
+          - version: "{{ rbenv_default_ruby }}"
           - version: 2.2.4
             env:
               RUBY_CONFIGURE_OPTS: "--enable-shared"

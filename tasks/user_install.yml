@@ -146,11 +146,11 @@
   when: rbenv_clean_up
   ignore_errors: yes
 
-- name: check if user ruby version is {{ rbenv.default_ruby }}
+- name: check if user ruby version is {{ rbenv_default_ruby }}
   shell: >
     $SHELL -lc
     "{{ rbenv_root }}/bin/rbenv version | cut -d ' ' -f 1 |
-    grep -Fx '{{ rbenv.default_ruby }}'"
+    grep -Fx '{{ rbenv_default_ruby }}'"
   become: yes
   become_user: "{{ item }}"
   with_items: "{{ rbenv_users }}"
@@ -160,10 +160,10 @@
   failed_when: false
   check_mode: no
 
-- name: set ruby {{ rbenv.default_ruby }} for selected users
+- name: set ruby {{ rbenv_default_ruby }} for selected users
   shell: >
     $SHELL -lc
-    "{{ rbenv_root }}/bin/rbenv global {{ rbenv.default_ruby }} && rbenv rehash"
+    "{{ rbenv_root }}/bin/rbenv global {{ rbenv_default_ruby }} && rbenv rehash"
   become: yes
   become_user: "{{ item[1] }}"
   with_together:
