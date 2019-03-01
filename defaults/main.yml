@@ -11,15 +11,30 @@ rbenv_clean_up: false
 rbenv_repo: "https://github.com/rbenv/rbenv.git"
 
 rbenv_plugins:
-  - { name: "rbenv-vars",         repo: "https://github.com/rbenv/rbenv-vars.git",         version: "master" }
-  - { name: "ruby-build",         repo: "https://github.com/rbenv/ruby-build.git",         version: "master" }
-  - { name: "rbenv-default-gems", repo: "https://github.com/rbenv/rbenv-default-gems.git", version: "master" }
-  - { name: "rbenv-installer",    repo: "https://github.com/rbenv/rbenv-installer.git",    version: "master" }
-  - { name: "rbenv-update",       repo: "https://github.com/rkh/rbenv-update.git",         version: "master" }
-  - { name: "rbenv-whatis",       repo: "https://github.com/rkh/rbenv-whatis.git",         version: "master" }
-  - { name: "rbenv-use",          repo: "https://github.com/rkh/rbenv-use.git",            version: "master" }
+  - { name: "rbenv-vars",
+      repo: "https://github.com/rbenv/rbenv-vars.git",
+      version: "master" }
+  - { name: "ruby-build",
+      repo: "https://github.com/rbenv/ruby-build.git",
+      version: "master" }
+  - { name: "rbenv-default-gems",
+      repo: "https://github.com/rbenv/rbenv-default-gems.git",
+      version: "master" }
+  - { name: "rbenv-installer",
+      repo: "https://github.com/rbenv/rbenv-installer.git",
+      version: "master" }
+  - { name: "rbenv-update",
+      repo: "https://github.com/rkh/rbenv-update.git",
+      version: "master" }
+  - { name: "rbenv-whatis",
+      repo: "https://github.com/rkh/rbenv-whatis.git",
+      version: "master" }
+  - { name: "rbenv-use",
+      repo: "https://github.com/rkh/rbenv-use.git",
+      version: "master" }
 
-rbenv_root: "{% if rbenv.env == 'system' %}/usr/local/rbenv{% else %}~/.rbenv{% endif %}"
+rbenv_root: "{% if rbenv.env == 'system' %}/usr/local/rbenv\
+             {% else %}~/.rbenv{% endif %}"
 
 rbenv_set_vars: true
 
@@ -27,33 +42,33 @@ rbenv_users: []
 
 rbenv_extra_depends: []
 rbenv_apt_packages:
-- build-essential
-- curl
-- git
-- libcurl4-openssl-dev
-- libffi-dev
-- libreadline-dev
-- libssl-dev
-- libxml2-dev
-- libxslt1-dev
-- zlib1g-dev
+  - build-essential
+  - curl
+  - git
+  - libcurl4-openssl-dev
+  - libffi-dev
+  - libreadline-dev
+  - libssl-dev
+  - libxml2-dev
+  - libxslt1-dev
+  - zlib1g-dev
 rbenv_dnf_packages:
-- curl
-- gcc
-- openssl-devel
-- libyaml-devel
-- readline-devel
-- zlib-devel
-- libffi-devel
-- git
+  - curl
+  - gcc
+  - openssl-devel
+  - libyaml-devel
+  - readline-devel
+  - zlib-devel
+  - libffi-devel
+  - git
 rbenv_yum_packages:
-- bzip2
-- curl
-- gcc
-- git
-- libffi-devel
-- libyaml-devel
-- openssl-devel
-- readline-devel
-- zlib-devel
+  - bzip2
+  - curl
+  - gcc
+  - git
+  - libffi-devel
+  - libyaml-devel
+  - openssl-devel
+  - readline-devel
+  - zlib-devel
 rbenv_user_profile: true
