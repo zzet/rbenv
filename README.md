@@ -23,9 +23,9 @@ Default variables are:
 
 ```yml
     rbenv_install: system
+    rbenv_version: v1.0.0
 
     rbenv:
-      version: v1.0.0
       default_ruby: 2.4.2
       rubies:
         - version: 2.4.2
@@ -82,8 +82,9 @@ Description:
 
 - `rbenv_install` - Type of rbenv installation, `system` or `user`. Default is
   `system`.
-- `rbenv.version` - Version of rbenv to install (tag from [rbenv releases
-  page](https://github.com/sstephenson/rbenv/releases))
+- `rbenv_version` - Version of rbenv to install (tag from [rbenv releases
+  page](https://github.com/sstephenson/rbenv/releases) or other valid git
+  object ref)
 - `rbenv.default_ruby` - Which ruby version to be set as global rbenv ruby.
 - `rbenv.rubies` - Versions of ruby to install. This is an array of hashes.
    E.g. `[ { version: 2.4.2, env: { RUBY_CONFIGURE_OPTS="--enable-shared" } } ]`
@@ -113,8 +114,8 @@ Example:
       gather_facts: true # https://github.com/zzet/ansible-rbenv-role/issues/37
       vars:
         rbenv_install: user
+        rbenv_version: v0.4.0
         rbenv:
-          version: v0.4.0
           default_ruby: 2.0.0-p353
           rubies:
           - version: 2.0.0-p353

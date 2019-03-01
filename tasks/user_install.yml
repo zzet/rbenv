@@ -3,7 +3,7 @@
   git:
     repo: '{{ rbenv_repo }}'
     dest: '{{ rbenv_root }}'
-    version: '{{ rbenv.version }}'
+    version: '{{ rbenv_version }}'
     accept_hostkey: yes
     force: yes
   with_items: "{{ rbenv_users }}"
