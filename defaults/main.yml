@@ -1,6 +1,7 @@
 ---
+rbenv_install: system
+
 rbenv:
-  env: system
   version: v1.0.0
   default_ruby: 2.4.2
   rubies:
@@ -33,7 +34,7 @@ rbenv_plugins:
       repo: "https://github.com/rkh/rbenv-use.git",
       version: "master" }
 
-rbenv_root: "{% if rbenv.env == 'system' %}/usr/local/rbenv\
+rbenv_root: "{% if rbenv_install == 'system' %}/usr/local/rbenv\
              {% else %}~/.rbenv{% endif %}"
 
 rbenv_set_vars: true
