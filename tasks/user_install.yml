@@ -54,7 +54,7 @@
   become: yes
   when: ansible_os_family == 'Darwin' and rbenv_user_profile
 
-- name: set default-gems for select users
+- name: set default-gems for selected users
   copy:
     src: default-gems
     dest: '{{ rbenv_root }}/default-gems'
@@ -64,7 +64,7 @@
   when: default_gems_file is not defined
   ignore_errors: yes
 
-- name: set custom default-gems for select users
+- name: set custom default-gems for selected users
   copy:
     src: '{{ default_gems_file }}'
     dest: '{{ rbenv_root }}/default-gems'
@@ -74,7 +74,7 @@
   when: default_gems_file is defined
   ignore_errors: yes
 
-- name: set gemrc for select users
+- name: set gemrc for selected users
   copy:
     src: gemrc
     dest: ~/.gemrc
@@ -83,7 +83,7 @@
   become_user: "{{ item }}"
   ignore_errors: yes
 
-- name: set vars for select users
+- name: set vars for selected users
   copy:
     src: vars
     dest: '{{ rbenv_root }}/vars'
@@ -93,7 +93,7 @@
   when: rbenv_set_vars
   ignore_errors: yes
 
-- name: check ruby versions installed for select users
+- name: check ruby versions installed for selected users
   shell: $SHELL -lc "{{ rbenv_root }}/bin/rbenv versions --bare"
   with_items: "{{ rbenv_users }}"
   become: yes
@@ -104,7 +104,7 @@
   failed_when: false
   check_mode: no
 
-- name: install ruby {{ item[1].version }} for select users
+- name: install ruby {{ item[1].version }} for selected users
   shell: >
     $SHELL -lc "{{ rbenv_root }}/bin/rbenv install --skip-existing
     {{ item[1].version }}"
@@ -117,7 +117,7 @@
   environment: "{{ item[1].env | default({}) | \
                 combine({ 'TMPDIR': rbenv_tmpdir }) }}"
 
-- name: check which old rubies to remove for select users
+- name: check which old rubies to remove for selected users
   set_fact:
     drop_ruby:
       - "{{ item[1] }}"
@@ -160,7 +160,7 @@
   failed_when: false
   check_mode: no
 
-- name: set ruby {{ rbenv.default_ruby }} for select users
+- name: set ruby {{ rbenv.default_ruby }} for selected users
   shell: >
     $SHELL -lc
     "{{ rbenv_root }}/bin/rbenv global {{ rbenv.default_ruby }} && rbenv rehash"
