@@ -1,0 +1,16 @@
+---
+- name: Install apt build dependencies
+  include_tasks: apt_build_depends.yml
+  when: ansible_pkg_mgr == 'apt'
+- name: Install yum build dependencies
+  include_tasks: yum_build_depends.yml
+  when: ansible_pkg_mgr == 'yum'
+- name: Install dnf build dependencies
+  include_tasks: dnf_build_depends.yml
+  when: ansible_pkg_mgr == 'dnf'
+# - name: Install pacman build dependencies
+#   include_tasks: pacman_build_depends.yml # Arch Linux
+#   when: ansible_pkg_mgr == 'pacman'
+- name: Install homebrew build dependencies
+  include_tasks: homebrew_build_depends.yml
+  when: ansible_os_family == 'Darwin'
