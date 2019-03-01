@@ -1,8 +1,4 @@
 ---
-# FIXME: this does the same as role defaults. Is it needed?
-- name: include env vars
-  include_vars: "{{ rbenv_install }}.yml"
-
 - import_tasks: apt_build_depends.yml
   when: ansible_pkg_mgr == 'apt'
 - import_tasks: yum_build_depends.yml
