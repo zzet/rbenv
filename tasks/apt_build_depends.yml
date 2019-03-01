@@ -21,7 +21,8 @@
 
 - name: Create the list of ruby versions.
   set_fact:
-    rbenv_ruby_versions: "{{ rbenv_ruby_versions | default([]) }} + {{ [item.version] }}"
+    rbenv_ruby_versions:
+      "{{ rbenv_ruby_versions | default([]) }} + {{ [item.version] }}"
   with_items:
     - "{{ rbenv.rubies }}"
 
