@@ -8,6 +8,7 @@
     version: '{{ rbenv_version }}'
     accept_hostkey: yes
     force: yes
+    update: '{{ rbenv_force_update }}'
 
 - name: create plugins directory for system
   become: yes
@@ -25,6 +26,7 @@
     version: '{{ item.version }}'
     accept_hostkey: yes
     force: yes
+    update: '{{ item.force_update | default(rbenv_force_update) }}'
   with_items: "{{ rbenv_plugins }}"
 
 - name: add rbenv initialization to profile system-wide

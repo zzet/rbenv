@@ -6,6 +6,7 @@
     version: '{{ rbenv_version }}'
     accept_hostkey: yes
     force: yes
+    update: "{{ rbenv_force_update }}"
   with_items: "{{ rbenv_users }}"
   become: yes
   become_user: "{{ item }}"
@@ -27,6 +28,7 @@
     version: '{{ item[1].version }}'
     accept_hostkey: yes
     force: yes
+    update: "{{ item[1].force_update | default(rbenv_force_update) }}"
   with_nested:
     - "{{ rbenv_users }}"
     - "{{ rbenv_plugins }}"

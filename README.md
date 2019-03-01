@@ -25,6 +25,7 @@ Default variables are:
     rbenv_install: system
     rbenv_version: v1.0.0
     rbenv_default_ruby: 2.4.2
+    rbenv_force_update: false
 
     rbenv:
       rubies:
@@ -88,7 +89,8 @@ Description:
 - `rbenv_default_ruby` - Which ruby version to be set as global rbenv ruby.
 - `rbenv.rubies` - Versions of ruby to install. This is an array of hashes.
    E.g. `[ { version: 2.4.2, env: { RUBY_CONFIGURE_OPTS="--enable-shared" } } ]`
-- `rbenv_clean_up ` - Delete all ruby versions not listed above.
+- `rbenv_force_update` - Whether existing git checkout should be updated
+- `rbenv_clean_up` - Delete all ruby versions not listed above.
    Default value is `false`
 - `rbenv_repo` - Repository with source code of rbenv to install
 - `rbenv_plugins` - Array of Hashes with information about plugins to install
