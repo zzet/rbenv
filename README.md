@@ -24,12 +24,11 @@ Default variables are:
 ```yml
     rbenv_install: system
     rbenv_version: v1.0.0
-    rbenv_default_ruby: 2.4.2
     rbenv_force_update: false
 
-    rbenv:
-      rubies:
-        - version: "{{ rbenv_default_ruby }}"
+    rbenv_default_ruby: 2.4.2
+    rbenv_rubies:
+      - version: "{{ rbenv_default_ruby }}"
 
     rbenv_clean_up: false
 
@@ -87,7 +86,7 @@ Description:
   page](https://github.com/sstephenson/rbenv/releases) or other valid git
   object ref)
 - `rbenv_default_ruby` - Which ruby version to be set as global rbenv ruby.
-- `rbenv.rubies` - Versions of ruby to install. This is an array of hashes.
+- `rbenv_rubies` - Versions of ruby to install. This is an array of hashes.
    E.g. `[ { version: 2.4.2, env: { RUBY_CONFIGURE_OPTS="--enable-shared" } } ]`
 - `rbenv_force_update` - Whether existing git checkout should be updated
 - `rbenv_clean_up` - Delete all ruby versions not listed above.
@@ -118,15 +117,14 @@ Example:
         rbenv_install: user
         rbenv_version: v0.4.0
         rbenv_default_ruby: 2.0.0-p353
-        rbenv:
-          rubies:
-          - version: "{{ rbenv_default_ruby }}"
-          - version: 2.2.4
-            env:
-              RUBY_CONFIGURE_OPTS: "--enable-shared"
-          - version: 2.3.4
-            env:
-              RUBY_CONFIGURE_OPTS: "--enable-shared --with-jemalloc"
+        rbenv_rubies:
+        - version: "{{ rbenv_default_ruby }}"
+        - version: 2.2.4
+          env:
+            RUBY_CONFIGURE_OPTS: "--enable-shared"
+        - version: 2.3.4
+          env:
+            RUBY_CONFIGURE_OPTS: "--enable-shared --with-jemalloc"
         rbenv_extra_depends:
           - libjemalloc1
           - libjemalloc-dev

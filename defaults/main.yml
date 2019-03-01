@@ -1,12 +1,11 @@
 ---
 rbenv_install: system
 rbenv_version: v1.0.0
-rbenv_default_ruby: 2.4.2
 rbenv_force_update: false
 
-rbenv:
-  rubies:
-    - version: "{{ rbenv_default_ruby }}"
+rbenv_default_ruby: 2.4.2
+rbenv_rubies:
+  - version: "{{ rbenv_default_ruby }}"
 
 rbenv_clean_up: false
 

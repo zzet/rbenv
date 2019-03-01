@@ -70,7 +70,7 @@
 - name: check ruby versions installed for system
   shell: $SHELL -lc "rbenv versions --bare"
   register: rbenv_versions
-  with_items: '{{ rbenv.rubies }}'
+  with_items: '{{ rbenv_rubies }}'
   changed_when: false
   ignore_errors: yes
   failed_when: false
@@ -80,7 +80,7 @@
   shell: $SHELL -lc "rbenv install --skip-existing {{ item.version }}"
   become: yes
   with_items:
-    - '{{ rbenv.rubies }}'
+    - '{{ rbenv_rubies }}'
   environment: "{{ item.env | default({}) | \
                 combine({ 'TMPDIR': rbenv_tmpdir }) }}"
 
@@ -91,7 +91,7 @@
   become: yes
   with_nested:
     - "{{ rbenv_versions.results }}"
-    - "{{ rbenv.rubies|map(attribute='version')|list }}"
+    - "{{ rbenv_rubies|map(attribute='version')|list }}"
   when:
     - rbenv_clean_up
     - item[0].stdout_lines|list != item[1]

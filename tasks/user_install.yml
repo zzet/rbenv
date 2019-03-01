@@ -114,7 +114,7 @@
   become_user: "{{ item[0] }}"
   with_nested:
     - "{{ rbenv_users }}"
-    - "{{ rbenv.rubies }}"
+    - "{{ rbenv_rubies }}"
   ignore_errors: yes
   environment: "{{ item[1].env | default({}) | \
                 combine({ 'TMPDIR': rbenv_tmpdir }) }}"
@@ -129,7 +129,7 @@
   with_nested:
     - "{{ ruby_installed.results }}"
     - "{{ rbenv_users }}"
-    - "{{ rbenv.rubies|map(attribute='version')|list }}"
+    - "{{ rbenv_rubies|map(attribute='version')|list }}"
   when:
     - rbenv_clean_up
     - item[0].item[0] == item[1]

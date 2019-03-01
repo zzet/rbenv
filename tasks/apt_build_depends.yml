@@ -24,7 +24,7 @@
     rbenv_ruby_versions:
       "{{ rbenv_ruby_versions | default([]) }} + {{ [item.version] }}"
   with_items:
-    - "{{ rbenv.rubies }}"
+    - "{{ rbenv_rubies }}"
 
 - name: Install packages required to build Ruby 1.8.7
   apt:
