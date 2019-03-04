@@ -90,24 +90,16 @@ Description:
   page](https://github.com/sstephenson/rbenv/releases) or other valid git
   object ref)
 - `rbenv_default_ruby` - Which ruby version to be set as global rbenv ruby.
-- `rbenv_rubies` - Versions of ruby to install. This is an array of hashes.
-   E.g. `[ { version: 2.4.2, env: { RUBY_CONFIGURE_OPTS="--enable-shared" } } ]`
+- `rbenv_rubies` - Versions of ruby to install, see [Configuring
+   rubies](#configuring-rubies) below.
 - `rbenv_force_update` - Whether existing git checkout should be updated
 - `rbenv_clean_up` - Delete all ruby versions not listed above.
    Default value is `false`
 - `rbenv_repo` - Repository with source code of rbenv to install
-- `rbenv_plugins` -  List of plugins to install. The default setting is to
-  install [ruby\_build](https://github.com/rbenv/ruby-build) plugin only,
-  with [rbenv-vars](https://github.com/rbenv/rbenv-vars),
-  [rbenv-default-gems](https://github.com/rbenv/rbenv-default-gems),
-  [rbenv-installer](https://github.com/rbenv/rbenv-installer),
-  [rbenv-update](https://github.com/rkh/rbenv-update),
-  [rbenv-whatis](https://github.com/rkh/rbenv-whatis) and
-  [rbenv-use](https://github.com/rkh/rbenv-use) being opt-in options.
-- `rbenv_plugin_{{ name }}` - Specification of a plugin. This should be a hash
-   with keys `name`, `repo` (git url), `version`. Optional attribute
-  `force_update` controls if git checkout should be performed when the plugin
-   appears to be installed.
+- `rbenv_plugins` -  List of plugins to install. See [configuring
+plugins](#configuring-plugins) below for details.
+- `rbenv_plugin_{{ name }}` - Specification of a plugin. See [configuring
+plugins](#configuring-plugins)
 - `rbenv_root` - Install path
 - `rbenv_users` - Array of usernames for multiuser install.
    User must be present in the system
@@ -122,7 +114,87 @@ Description:
 - `rbenv_set_vars` - Set default vars `GEM_PATH=$GEM_PATH:$HOME/.gems`
   for 'user' env. Default value is `true`
 
-Example:
+Configuring rubies
+------------------
+
+The smallest configuration possible to bring the ruby onto the target machine
+is to specify the default ruby version:
+
+
+```yaml
+- hosts: ruby_hosts
+  roles: timon.rbenv
+  vars: { rbenv_default_ruby: 2.4.2 }
+```
+
+This will perform system-wide installation of `rbenv` (plus `ruby_build`
+plugin), build ruby 2.4.2 and configures 2.4.2 to be the default ruby on the
+host.
+
+To install several ruby versions, you'll need to list them in `rbenv_rubies`
+variable. This variable is expected to be a list of hashes that should have
+at least `version` attribute. The default is to just include
+`rbenv_default_ruby` version:
+
+```yaml
+rbenv_rubies:
+  - version: '{{ rbenv_default_ruby }}'
+```
+
+Besides version, you could use`env` attribute to specify [additional
+variables](https://github.com/rbenv/ruby-build#custom-build-configuration)
+for custom build configuration.
+
+```yaml
+rbenv_rubies:
+  - version: 2.4.2
+    env: { RUBY_CONFIGURE_OPTS: "--enable-shared" }
+```
+
+Configuring plugins
+-------------------
+
+The list of plugins that should be installed in addition to base `rbenv`
+distirbution is specified in `rbenv_plugins` variable. The definition for each
+plugin listed in `rbenv_plugins` is loaded from `rbenv_plugin_{{plugin_name}}`
+during role execution.
+
+The default setting is to install
+[ruby\_build](https://github.com/rbenv/ruby-build) plugin only.
+This is what default plugin configuration looks like:
+
+```yaml
+rbenv_plugins:
+  - ruby_build
+rbenv_plugin_ruby_build:
+  name: "ruby-build"
+  repo: "https://github.com/rbenv/ruby-build.git"
+  version: "master"
+  force_update: true
+```
+
+You can opt-in for the following plugins installation, preserved from the
+original `zzet.rbenv` role:
+
+Name for `rbenv_plugins` | Plugin
+-------------------------|---------
+`rbenv_vars`   | [rbenv-vars](https://github.com/rbenv/rbenv-vars)
+`default_gems` | [rbenv-default-gems](https://github.com/rbenv/rbenv-default-gems)
+`installer`    | [rbenv-installer](https://github.com/rbenv/rbenv-installer)
+`update`       | [rbenv-update](https://github.com/rkh/rbenv-update)
+`whatis`       | [rbenv-whatis](https://github.com/rkh/rbenv-whatis)
+`use`          | [rbenv-use](https://github.com/rkh/rbenv-use)
+
+You can add your own plugins to the `rbenv_plugins` list, provided that you also
+sepecify a plugin definition under `rbenv_plugin_{{plugin_name}}`.
+Plugin definition should be a hash with keys `name`, `repo` (git url),
+and `version` (tag or branch or otherwise valid git object ref).
+Optional attribute `force_update` controls if git checkout should be performed
+when the plugin appears to be installed.  The default value for `force_update`
+attribute is set to match `rbenv_force_update` variable.
+
+Example playbook
+----------------
 
 ```yml
     - hosts: web
