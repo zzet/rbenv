@@ -15,13 +15,7 @@ rbenv_plugins_specs: []
 rbenv_plugins_keys: []
 
 rbenv_plugins:
-  - vars
   - ruby_build
-  - default_gems
-  - installer
-  - update
-  - whatis
-  - use
 
 rbenv_plugin_vars:
   name: "rbenv-vars"

@@ -35,13 +35,7 @@ Default variables are:
     rbenv_repo: "https://github.com/rbenv/rbenv.git"
 
     rbenv_plugins:
-      - vars
       - ruby_build
-      - default_gems
-      - installer
-      - update
-      - whatis
-      - use
 
     rbenv_plugin_vars:
       name: "rbenv-vars"
@@ -102,7 +96,14 @@ Description:
 - `rbenv_clean_up` - Delete all ruby versions not listed above.
    Default value is `false`
 - `rbenv_repo` - Repository with source code of rbenv to install
-- `rbenv_plugins` -  List of plugins to install
+- `rbenv_plugins` -  List of plugins to install. The default setting is to
+  install [ruby\_build](https://github.com/rbenv/ruby-build) plugin only,
+  with [rbenv-vars](https://github.com/rbenv/rbenv-vars),
+  [rbenv-default-gems](https://github.com/rbenv/rbenv-default-gems),
+  [rbenv-installer](https://github.com/rbenv/rbenv-installer),
+  [rbenv-update](https://github.com/rkh/rbenv-update),
+  [rbenv-whatis](https://github.com/rkh/rbenv-whatis) and
+  [rbenv-use](https://github.com/rkh/rbenv-use) being opt-in options.
 - `rbenv_plugin_{{ name }}` - Specification of a plugin. This should be a hash
    with keys `name`, `repo` (git url), `version`. Optional attribute
   `force_update` controls if git checkout should be performed when the plugin
