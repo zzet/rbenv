@@ -58,23 +58,12 @@
 
 - name: set default-gems for selected users
   copy:
-    src: default-gems
+    src: '{{ rbenv_plugin_default_gems.config }}'
     dest: '{{ rbenv_root }}/default-gems'
   with_items: "{{ rbenv_users }}"
   become: yes
   become_user: "{{ item }}"
-  when: default_gems_file is not defined
-  ignore_errors: yes
-
-- name: set custom default-gems for selected users
-  copy:
-    src: '{{ default_gems_file }}'
-    dest: '{{ rbenv_root }}/default-gems'
-  with_items: "{{ rbenv_users }}"
-  become: yes
-  become_user: "{{ item }}"
-  when: default_gems_file is defined
-  ignore_errors: yes
+  when: '"default_gems" in rbenv_plugins'
 
 - name: set gemrc for selected users
   copy:

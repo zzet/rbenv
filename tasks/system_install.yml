@@ -29,6 +29,14 @@
     update: '{{ item.force_update | default(rbenv_force_update) }}'
   loop: "{{ rbenv_plugins_specs }}"
 
+- name: Set default-gems for system
+  copy:
+    src: '{{ rbenv_plugin_default_gems.config }}'
+    dest: '{{ rbenv_root }}/default-gems'
+  become: yes
+  when: '"default_gems" in rbenv_plugins'
+
+
 - name: add rbenv initialization to profile system-wide
   template:
     src: rbenv_system.sh.j2

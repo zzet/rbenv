@@ -113,9 +113,8 @@ Description:
    User must be present in the system
 - `rbenv_extra_depends` - Array of extra system packages to install before
    compiling rubies
-- `default_gems_file` - This is Rbenv's plugin _rbenv-default-gems_.
-   Sets the path to a default-gems file of your choice (_don't set it_
-   if you want to use the default file `files/default-gems`)
+- `rbenv_default_gems` - Name of default-gems file for rbenv-default-gems
+   plugin (used only when `default_gems` is enabled in plugins)
 - `rbenv_owner` - The user  owning `rbenv_root` when `rbenv_install` is `system`
 - `rbenv_group` - The group owning `rbenv_root` when `rbenv_install` is `system`
 - `rbenv_tmpdir` - A temporary directory path used for artifacts when

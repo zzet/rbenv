@@ -29,6 +29,7 @@ rbenv_plugin_ruby_build:
 rbenv_plugin_default_gems:
   name: "rbenv-default-gems"
   repo: "https://github.com/rbenv/rbenv-default-gems.git"
+  config: "{{ rbenv_default_gems }}"
   version: "master"
 rbenv_plugin_installer:
   name: "rbenv-installer"
@@ -49,6 +50,9 @@ rbenv_plugin_use:
 
 rbenv_root: "{% if rbenv_install == 'system' %}/usr/local/rbenv\
              {% else %}~/.rbenv{% endif %}"
+
+# File is located in files/default-gems
+rbenv_default_gems: default-gems
 
 rbenv_set_vars: true
 
