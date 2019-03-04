@@ -35,33 +35,43 @@ Default variables are:
     rbenv_repo: "https://github.com/rbenv/rbenv.git"
 
     rbenv_plugins:
-      - { name: "rbenv-vars",
-          repo: "https://github.com/rbenv/rbenv-vars.git",
-          version: "master" }
+      - vars
+      - ruby_build
+      - default_gems
+      - installer
+      - update
+      - whatis
+      - use
 
-      - { name: "ruby-build",
-          repo: "https://github.com/rbenv/ruby-build.git",
-          version: "master" }
-
-      - { name: "rbenv-default-gems",
-          repo: "https://github.com/rbenv/rbenv-default-gems.git",
-          version: "master" }
-
-      - { name: "rbenv-installer",
-          repo: "https://github.com/rbenv/rbenv-installer.git",
-          version: "master" }
-
-      - { name: "rbenv-update",
-          repo: "https://github.com/rkh/rbenv-update.git",
-          version: "master" }
-
-      - { name: "rbenv-whatis",
-          repo: "https://github.com/rkh/rbenv-whatis.git",
-          version: "master" }
-
-      - { name: "rbenv-use",
-          repo: "https://github.com/rkh/rbenv-use.git",
-          version: "master" }
+    rbenv_plugin_vars:
+      name: "rbenv-vars"
+      repo: "https://github.com/rbenv/rbenv-vars.git"
+      version: "master"
+    rbenv_plugin_ruby_build:
+      name: "ruby-build"
+      repo: "https://github.com/rbenv/ruby-build.git"
+      version: "master"
+      force_update: true
+    rbenv_plugin_default_gems:
+      name: "rbenv-default-gems"
+      repo: "https://github.com/rbenv/rbenv-default-gems.git"
+      version: "master"
+    rbenv_plugin_installer:
+      name: "rbenv-installer"
+      repo: "https://github.com/rbenv/rbenv-installer.git"
+      version: "master"
+    rbenv_plugin_update:
+      name: "rbenv-update"
+      repo: "https://github.com/rkh/rbenv-update.git"
+      version: "master"
+    rbenv_plugin_whatis:
+      name: "rbenv-whatis"
+      repo: "https://github.com/rkh/rbenv-whatis.git"
+      version: "master"
+    rbenv_plugin_use:
+      name: "rbenv-use"
+      repo: "https://github.com/rkh/rbenv-use.git"
+      version: "master"
 
     rbenv_root: "{% if rbenv_install == 'system' %}/usr/local/rbenv\
                  {% else %}$HOME/.rbenv{% endif %}"
@@ -92,7 +102,11 @@ Description:
 - `rbenv_clean_up` - Delete all ruby versions not listed above.
    Default value is `false`
 - `rbenv_repo` - Repository with source code of rbenv to install
-- `rbenv_plugins` - Array of Hashes with information about plugins to install
+- `rbenv_plugins` -  List of plugins to install
+- `rbenv_plugin_{{ name }}` - Specification of a plugin. This should be a hash
+   with keys `name`, `repo` (git url), `version`. Optional attribute
+  `force_update` controls if git checkout should be performed when the plugin
+   appears to be installed.
 - `rbenv_root` - Install path
 - `rbenv_users` - Array of usernames for multiuser install.
    User must be present in the system

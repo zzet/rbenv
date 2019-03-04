@@ -31,7 +31,7 @@
     update: "{{ item[1].force_update | default(rbenv_force_update) }}"
   with_nested:
     - "{{ rbenv_users }}"
-    - "{{ rbenv_plugins }}"
+    - "{{ rbenv_plugins_specs }}"
   become: yes
   become_user: "{{ item[0] }}"
   ignore_errors: yes

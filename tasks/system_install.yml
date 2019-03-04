@@ -17,7 +17,7 @@
     state: directory
     path: '{{ rbenv_root }}/plugins'
 
-- name: install plugins for system
+- name: Install plugins for system
   become: yes
   become_user: '{{ rbenv_owner }}'
   git:
@@ -27,7 +27,7 @@
     accept_hostkey: yes
     force: yes
     update: '{{ item.force_update | default(rbenv_force_update) }}'
-  with_items: "{{ rbenv_plugins }}"
+  loop: "{{ rbenv_plugins_specs }}"
 
 - name: add rbenv initialization to profile system-wide
   template:

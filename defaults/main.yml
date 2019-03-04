@@ -11,28 +11,47 @@ rbenv_clean_up: false
 
 rbenv_repo: "https://github.com/rbenv/rbenv.git"
 
+rbenv_plugins_specs: []
+rbenv_plugins_keys: []
+
 rbenv_plugins:
-  - { name: "rbenv-vars",
-      repo: "https://github.com/rbenv/rbenv-vars.git",
-      version: "master" }
-  - { name: "ruby-build",
-      repo: "https://github.com/rbenv/ruby-build.git",
-      version: "master" }
-  - { name: "rbenv-default-gems",
-      repo: "https://github.com/rbenv/rbenv-default-gems.git",
-      version: "master" }
-  - { name: "rbenv-installer",
-      repo: "https://github.com/rbenv/rbenv-installer.git",
-      version: "master" }
-  - { name: "rbenv-update",
-      repo: "https://github.com/rkh/rbenv-update.git",
-      version: "master" }
-  - { name: "rbenv-whatis",
-      repo: "https://github.com/rkh/rbenv-whatis.git",
-      version: "master" }
-  - { name: "rbenv-use",
-      repo: "https://github.com/rkh/rbenv-use.git",
-      version: "master" }
+  - vars
+  - ruby_build
+  - default_gems
+  - installer
+  - update
+  - whatis
+  - use
+
+rbenv_plugin_vars:
+  name: "rbenv-vars"
+  repo: "https://github.com/rbenv/rbenv-vars.git"
+  version: "master"
+rbenv_plugin_ruby_build:
+  name: "ruby-build"
+  repo: "https://github.com/rbenv/ruby-build.git"
+  version: "master"
+  force_update: true
+rbenv_plugin_default_gems:
+  name: "rbenv-default-gems"
+  repo: "https://github.com/rbenv/rbenv-default-gems.git"
+  version: "master"
+rbenv_plugin_installer:
+  name: "rbenv-installer"
+  repo: "https://github.com/rbenv/rbenv-installer.git"
+  version: "master"
+rbenv_plugin_update:
+  name: "rbenv-update"
+  repo: "https://github.com/rkh/rbenv-update.git"
+  version: "master"
+rbenv_plugin_whatis:
+  name: "rbenv-whatis"
+  repo: "https://github.com/rkh/rbenv-whatis.git"
+  version: "master"
+rbenv_plugin_use:
+  name: "rbenv-use"
+  repo: "https://github.com/rkh/rbenv-use.git"
+  version: "master"
 
 rbenv_root: "{% if rbenv_install == 'system' %}/usr/local/rbenv\
              {% else %}~/.rbenv{% endif %}"
