@@ -69,16 +69,18 @@ rbenv_apt_packages:
   - libssl-dev
   - libxml2-dev
   - libxslt1-dev
+  - patch
   - zlib1g-dev
 rbenv_dnf_packages:
   - curl
   - gcc
-  - openssl-devel
+  - git
+  - libffi-devel
   - libyaml-devel
+  - openssl-devel
+  - patch
   - readline-devel
   - zlib-devel
-  - libffi-devel
-  - git
 rbenv_yum_packages:
   - bzip2
   - curl
@@ -87,6 +89,7 @@ rbenv_yum_packages:
   - libffi-devel
   - libyaml-devel
   - openssl-devel
+  - patch
   - readline-devel
   - zlib-devel
 rbenv_user_profile: true

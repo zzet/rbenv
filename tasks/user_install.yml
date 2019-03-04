@@ -103,10 +103,26 @@
   become_user: "{{ item[0] }}"
   with_nested:
     - "{{ rbenv_users }}"
-    - "{{ rbenv_rubies }}"
+    - "{{ rbenv_rubies | selectattr('patch', 'undefined') | list }}"
   ignore_errors: yes
   environment: "{{ item[1].env | default({}) | \
                 combine({ 'TMPDIR': rbenv_tmpdir }) }}"
+
+- name: install patched ruby {{ item[1].version }} for selected users
+  shell:
+    $SHELL -lc
+    "curl -L {{ [item[1].patch] | flatten | join(" ") }} |
+     {{ rbenv_root }}/bin/rbenv install --skip-existing --patch
+     {{ item[1].version }}"
+  become: yes
+  become_user: "{{ item[0] }}"
+  with_nested:
+    - "{{ rbenv_users }}"
+    - "{{ rbenv_rubies | rejectattr('patch', 'undefined') | list }}"
+  ignore_errors: yes
+  environment: "{{ item[1].env | default({}) | \
+                combine({ 'TMPDIR': rbenv_tmpdir }) }}"
+
 
 - name: check which old rubies to remove for selected users
   set_fact:

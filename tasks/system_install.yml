@@ -87,10 +87,19 @@
 - name: install ruby versions for system
   shell: $SHELL -lc "rbenv install --skip-existing {{ item.version }}"
   become: yes
-  with_items:
-    - '{{ rbenv_rubies }}'
+  loop: "{{ rbenv_rubies | selectattr('patch', 'undefined') | list }}"
   environment: "{{ item.env | default({}) | \
                 combine({ 'TMPDIR': rbenv_tmpdir }) }}"
+- name: install patched ruby versions for system
+  shell:
+    $SHELL -lc
+    "curl -L {{ [item.patch] | flatten | join(" ") }} |
+     rbenv install --skip-existing --patch {{ item.version }}"
+  become: yes
+  loop: "{{ rbenv_rubies | rejectattr('patch', 'undefined') | list }}"
+  environment: "{{ item.env | default({}) | \
+                combine({ 'TMPDIR': rbenv_tmpdir }) }}"
+  when: item.patch | default([])
 
 - name: check which old rubies to remove for system
   set_fact:

@@ -151,6 +151,10 @@ rbenv_rubies:
     env: { RUBY_CONFIGURE_OPTS: "--enable-shared" }
 ```
 
+If certain ruby version requires a patch to be built, use `patch` attribute to
+provide URLs to patch(es) to apply. Contents of the URLs listed would be
+piped by `curl` to `rbenv install --patch` command.
+
 Configuring plugins
 -------------------
 
