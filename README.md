@@ -73,6 +73,7 @@ Default variables are:
     rbenv_users: []
 
     rbenv_extra_depends: []
+    rbenv_set_secure_path: yes
 ```
 
 Variables to control a system installation (these are not set by default):
@@ -113,6 +114,8 @@ plugins](#configuring-plugins)
   installing rubies. Defaults to system's `$TMPDIR`
 - `rbenv_set_vars` - Set default vars `GEM_PATH=$GEM_PATH:$HOME/.gems`
   for 'user' env. Default value is `true`
+- `rbenv_set_secure_path` - whether rbenv's `bin/` directory should be added
+  to secure\_path option of sudoers file on system-wide install.
 
 Configuring rubies
 ------------------

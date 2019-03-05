@@ -55,6 +55,7 @@ rbenv_root: "{% if rbenv_install == 'system' %}/usr/local/rbenv\
 rbenv_default_gems: default-gems
 
 rbenv_set_vars: true
+rbenv_set_secure_path: true
 
 rbenv_users: []
 
