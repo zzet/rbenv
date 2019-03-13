@@ -48,16 +48,28 @@
   when:
     - ansible_os_family != 'OpenBSD' and ansible_os_family != 'Darwin'
 
+- name: "Check {{ rbenv_root}}/bin is in sudoer's secure_path"
+  lineinfile:
+    dest: /etc/sudoers
+    regexp:
+      '^\s*Defaults\s+secure_path\s*=\s*.*:{{ rbenv_root }}/bin(:|$)'
+    state: absent
+  check_mode: true
+  register: rbenv_secure_path_check
+  become: yes
+  when: rbenv_set_secure_path
+
+
 - name: "Add {{ rbenv_root }}/bin to sudoer's secure_path"
   lineinfile:
     dest: /etc/sudoers
     backrefs: true
     regexp:
-      '^#?\s*Defaults\s+secure_path\s*=\s*(.*)(:{{ rbenv_root }}/bin)?((:.*)?)$'
-    line: 'Defaults    secure_path = \1:{{ rbenv_root }}/bin\3'
+      '^#?\s*Defaults\s+secure_path\s*=\s*(.*)$'
+    line: 'Defaults    secure_path = \1:{{ rbenv_root }}/bin'
     validate: 'visudo -cf %s'
   become: yes
-  when: rbenv_set_secure_path
+  when: rbenv_set_secure_path and not rbenv_secure_path_check.changed
 
 - name: Set group ownership of content under rbenv_root
   shell:
