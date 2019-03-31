@@ -109,6 +109,8 @@
 - name: install ruby {{ item[1].version }} for select users
   shell: $SHELL -lc "{{ rbenv_root }}/bin/rbenv install --skip-existing {{ item[1].version }}"
   become: yes
+  args:
+    creates: "~/.rbenv/versions/{{ item[1].version }}"
   become_user: "{{ item[0] }}"
   with_nested:
     - "{{ rbenv_users }}"
