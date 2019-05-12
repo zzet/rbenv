@@ -106,7 +106,7 @@
   failed_when: false
   check_mode: no
 
-- name: install ruby {{ item[1].version }} for select users
+- name: "install ruby {{ item[1].version }} for select users"
   shell: $SHELL -lc "{{ rbenv_root }}/bin/rbenv install --skip-existing {{ item[1].version }}"
   become: yes
   args:
@@ -145,7 +145,7 @@
   when: rbenv_clean_up
   ignore_errors: yes
 
-- name: check if user ruby version is {{ rbenv.default_ruby }}
+- name: "check if user ruby version is {{ rbenv.default_ruby }}"
   shell: $SHELL -lc "{{ rbenv_root }}/bin/rbenv version | cut -d ' ' -f 1 | grep -Fx '{{ rbenv.default_ruby }}'"
   become: yes
   become_user: "{{ item }}"
@@ -156,7 +156,7 @@
   failed_when: false
   check_mode: no
 
-- name: set ruby {{ rbenv.default_ruby }} for select users
+- name: "set ruby {{ rbenv.default_ruby }} for select users"
   shell: $SHELL -lc "{{ rbenv_root }}/bin/rbenv global {{ rbenv.default_ruby }} && rbenv rehash"
   become: yes
   become_user: "{{ item[1] }}"

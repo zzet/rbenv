@@ -101,7 +101,7 @@
   when: rbenv_clean_up
   ignore_errors: yes
 
-- name: check if current system ruby version is {{ rbenv.default_ruby }}
+- name: "check if current system ruby version is {{ rbenv.default_ruby }}"
   shell: $SHELL -lc "rbenv version | cut -d ' ' -f 1 | grep -Fx '{{ rbenv.default_ruby }}'"
   register: ruby_selected
   changed_when: false
@@ -109,7 +109,7 @@
   failed_when: false
   check_mode: no
 
-- name: set ruby {{ rbenv.default_ruby }} for system
+- name: "set ruby {{ rbenv.default_ruby }} for system"
   become: yes
   shell: bash -lc "rbenv global {{ rbenv.default_ruby }} && rbenv rehash"
   when:
