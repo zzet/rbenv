@@ -57,7 +57,7 @@
   check_mode: true
   register: rbenv_secure_path_check
   become: yes
-  when: rbenv_set_secure_path
+  when: rbenv_set_secure_path | bool
 
 
 - name: "Add {{ rbenv_root }}/bin to sudoer's secure_path"
@@ -69,7 +69,7 @@
     line: 'Defaults    secure_path = \2\1:{{ rbenv_root }}/bin\2'
     validate: 'visudo -cf %s'
   become: yes
-  when: rbenv_set_secure_path and not rbenv_secure_path_check.changed
+  when: (rbenv_set_secure_path | bool) and not rbenv_secure_path_check.changed
 
 - name: Set group ownership of content under rbenv_root
   shell:
