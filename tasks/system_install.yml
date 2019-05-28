@@ -52,7 +52,7 @@
   lineinfile:
     dest: /etc/sudoers
     regexp:
-      '^\s*Defaults\s+secure_path\s*=\s*.*:{{ rbenv_root }}/bin(:|$)'
+      '^\s*Defaults\s+secure_path\s*=\s*.*:{{ rbenv_root }}/bin(:|"?$)'
     state: absent
   check_mode: true
   register: rbenv_secure_path_check
@@ -65,8 +65,8 @@
     dest: /etc/sudoers
     backrefs: true
     regexp:
-      '^#?\s*Defaults\s+secure_path\s*=\s*(.*)$'
-    line: 'Defaults    secure_path = \1:{{ rbenv_root }}/bin'
+      '^#?\s*Defaults\s+secure_path\s*=\s*"?([^"]*)("?)$'
+    line: 'Defaults    secure_path = \2\1:{{ rbenv_root }}/bin\2'
     validate: 'visudo -cf %s'
   become: yes
   when: rbenv_set_secure_path and not rbenv_secure_path_check.changed
