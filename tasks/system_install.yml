@@ -133,7 +133,7 @@
     - "{{ rbenv_versions.results }}"
     - "{{ rbenv_rubies|map(attribute='version')|list }}"
   when:
-    - rbenv_clean_up
+    - rbenv_clean_up | bool
     - item[0].stdout_lines|list != item[1]
   register: removable_rubies
   ignore_errors: yes
@@ -143,7 +143,7 @@
     $SHELL -lc "rm -rf {{ rbenv_root }}/versions/{{ ansible_facts.drop_ruby }}"
   changed_when: false
   become: yes
-  when: rbenv_clean_up
+  when: rbenv_clean_up | bool
   ignore_errors: yes
 
 - name: check if current system ruby version is {{ rbenv_default_ruby }}

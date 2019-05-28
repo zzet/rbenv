@@ -115,6 +115,8 @@
      {{ rbenv_root }}/bin/rbenv install --skip-existing --patch
      {{ item[1].version }}"
   become: yes
+  args:
+    creates: "~/.rbenv/versions/{{ item[1].version }}"
   become_user: "{{ item[0] }}"
   with_nested:
     - "{{ rbenv_users }}"
@@ -136,7 +138,7 @@
     - "{{ rbenv_users }}"
     - "{{ rbenv_rubies|map(attribute='version')|list }}"
   when:
-    - rbenv_clean_up
+    - rbenv_clean_up | bool
     - item[0].item[0] == item[1]
     - item[0].stdout_lines|list != item[2]
   register: removable_rubies
@@ -150,7 +152,7 @@
   become: yes
   become_user: "{{ item.ansible_facts.drop_ruby[0] }}"
   with_items: "{{ removable_rubies.results }}"
-  when: rbenv_clean_up
+  when: rbenv_clean_up | bool
   ignore_errors: yes
 
 - name: check if user ruby version is {{ rbenv_default_ruby }}
