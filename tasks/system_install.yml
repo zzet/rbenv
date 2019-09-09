@@ -111,6 +111,6 @@
 
 - name: set ruby {{ rbenv.default_ruby }} for system
   become: yes
-  shell: bash -lc "rbenv global {{ rbenv.default_ruby }} && rbenv rehash"
+  shell: $SHELL -lc "rbenv global {{ rbenv.default_ruby }} && rbenv rehash"
   when:
     - ruby_selected.rc != 0
