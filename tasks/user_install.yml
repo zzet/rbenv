@@ -145,7 +145,7 @@
   check_mode: no
 
 - name: set ruby {{ rbenv.default_ruby }} for select users
-  shell: $0 -lc "{{ rbenv_root }}/bin/rbenv global {{ rbenv.default_ruby }} && rbenv rehash"
+  shell: $0 -lc "{{ rbenv_root }}/bin/rbenv global {{ rbenv.default_ruby }} && {{ rbenv_root }}/bin/rbenv rehash"
   become: yes
   become_user: "{{ item[1] }}"
   with_together:
