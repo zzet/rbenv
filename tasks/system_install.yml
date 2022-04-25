@@ -38,6 +38,28 @@
   when:
     - ansible_os_family != 'OpenBSD' and ansible_os_family != 'Darwin'
 
+
+- name: set default-gems for system
+  copy:
+    src: default-gems
+    dest: '{{ rbenv_root }}/default-gems'
+  with_items: "{{ rbenv_owner }}"
+  become: yes
+  become_user: "{{ item }}"
+  when:
+    - default_gems_file is not defined
+
+- name: set custom default-gems for system
+  copy:
+    src: '{{ default_gems_file }}'
+    dest: '{{ rbenv_root }}/default-gems'
+  with_items: "{{ rbenv_owner }}"
+  become: yes
+  become_user: "{{ item }}"
+  when:
+    - default_gems_file is defined
+
+
 - name: Set group ownership of content under rbenv_root
   shell:
     find '{{ rbenv_root }}'
