@@ -98,41 +98,44 @@
   failed_when: false
   check_mode: no
 
-- name: install ruby {{ item[1].version }} for select users
-  shell: $0 -lc "{{ rbenv_root }}/bin/rbenv install --skip-existing {{ item[1].version }}"
+- name: install specified ruby versions for select users
+  shell: $0 -lc "{{ rbenv_root }}/bin/rbenv install --skip-existing {{ item.1.version }}"
   become: yes
   args:
-    creates: "~/.rbenv/versions/{{ item[1].version }}"
-  become_user: "{{ item[0] }}"
+    creates: "~/.rbenv/versions/{{ item.1.version }}"
+  become_user: "{{ item.0 }}"
   with_nested:
     - "{{ rbenv_users }}"
     - "{{ rbenv.rubies }}"
+  loop_control:
+    label: Install {{ item.1.version }} for {{ item.0 }}
   environment: "{{ item[1].env | default({}) | combine({ 'TMPDIR': rbenv_tmpdir }) }}"
 
-- name: check which old rubies to remove for select users
+- name: check which ruby versions to remove 
   set_fact:
-    drop_ruby:
-      - "{{ item[1] }}"
-      - "{{ '{'+item[0].stdout_lines|list|difference(item[2])|join(',')+'}' }}"
+    drop_user: "{{ item.item }}"
+    drop_ruby: "{{ item.stdout_lines|list|difference(rbenv.rubies|map(attribute='version')|list) }}"
   become: yes
-  become_user: "{{ item[1] }}"
-  with_nested:
-    - "{{ ruby_installed.results }}"
-    - "{{ rbenv_users }}"
-    - "{{ rbenv.rubies|map(attribute='version')|list }}"
+  become_user: "{{ item.item }}"
+  with_items: "{{ rbenv_versions.results }}"
   when:
     - rbenv_clean_up | bool
-    - item[0].item[0] == item[1]
-    - item[0].stdout_lines|list != item[2]
+    - item.stdout_lines|list != rbenv.rubies|map(attribute='version')|list
   register: removable_rubies
 
-- name: remove old rubies
-  shell: $0 -lc "rm -rf {{ rbenv_root }}/versions/{{ item.ansible_facts.drop_ruby[1] }}"
-  changed_when: false
+- name: uninstall old ruby versions
+  shell: $0 -lc "{{ rbenv_root }}/bin/rbenv uninstall -f {{ rbenv_root }}/versions/{{ item.1 }}"
+  args:
+    removes: "~/.rbenv/versions/{{ item.1 }}"
   become: yes
-  become_user: "{{ item.ansible_facts.drop_ruby[0] }}"
-  with_items: "{{ removable_rubies.results }}"
-  when: rbenv_clean_up | bool
+  become_user: "{{ item.0.ansible_facts.drop_user }}"
+  with_subelements:
+    - "{{ removable_rubies.results }}"
+    - ansible_facts.drop_ruby
+  loop_control:
+    label: Remove {{ item.1 }} for {{ item.0.ansible_facts.drop_user }}
+  when:
+    - rbenv_clean_up | bool
 
 - name: check if user ruby version is {{ rbenv.default_ruby }}
   shell: $0 -lc "{{ rbenv_root }}/bin/rbenv version | cut -d ' ' -f 1 | grep -Fx '{{ rbenv.default_ruby }}'"
