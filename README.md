@@ -44,7 +44,7 @@ Default variables are:
 
       - { name: "rbenv-installer",
           repo: "https://github.com/rbenv/rbenv-installer.git",
-          version: "master" }
+          version: "main" }
 
       - { name: "rbenv-update",
           repo: "https://github.com/rkh/rbenv-update.git",
