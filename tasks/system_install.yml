@@ -1,6 +1,6 @@
 ---
 - name: checkout rbenv_repo for system
-  become: yes
+  become: true
   become_user: '{{ rbenv_owner }}'
   git:
     repo: '{{ rbenv_repo }}'
@@ -10,14 +10,14 @@
     force: yes
 
 - name: create plugins directory for system
-  become: yes
+  become: true
   become_user: '{{ rbenv_owner }}'
   file:
     state: directory
     path: '{{ rbenv_root }}/plugins'
 
 - name: install plugins for system
-  become: yes
+  become: true
   become_user: '{{ rbenv_owner }}'
   git:
     repo: '{{ item.repo }}'
@@ -34,9 +34,9 @@
     owner: root
     group: root
     mode: 0755
-  become: yes
+  become: true
   when:
-    - ansible_os_family != 'OpenBSD' and ansible_os_family != 'Darwin'
+    - ansible_facts['os_family'] != 'OpenBSD' and ansible_facts['os_family'] != 'Darwin'
 
 
 - name: set default-gems for system
@@ -44,7 +44,7 @@
     src: default-gems
     dest: '{{ rbenv_root }}/default-gems'
   with_items: "{{ rbenv_owner }}"
-  become: yes
+  become: true
   become_user: "{{ item }}"
   when:
     - default_gems_file is not defined
@@ -54,7 +54,7 @@
     src: '{{ default_gems_file }}'
     dest: '{{ rbenv_root }}/default-gems'
   with_items: "{{ rbenv_owner }}"
-  become: yes
+  become: true
   become_user: "{{ item }}"
   when:
     - default_gems_file is defined
@@ -66,7 +66,7 @@
       \( -iname ".git" -prune \) -o
       ! -group '{{ item }}'
       -exec chgrp -v '{{ item }}' {} + | head -n 1
-  become: yes
+  become: true
   with_items: '{{ rbenv_group | default([]) }}'
   when:
     - rbenv_group is defined
@@ -80,7 +80,7 @@
       \( -iname ".git" -prune \) -o
       -type d ! -perm -g+s
       -exec chmod -v g+rwxs {} + | head -n 1
-  become: yes
+  become: true
   when:
     - rbenv_group is defined
     - rbenv_group != None
@@ -92,13 +92,13 @@
   register: rbenv_versions
   with_items: '{{ rbenv.rubies }}'
   changed_when: false
-  ignore_errors: yes
+  ignore_errors: true
   failed_when: false
   check_mode: no
 
 - name: install ruby versions for system
   shell: $0 -lc "rbenv install --skip-existing {{ item.version }}"
-  become: yes
+  become: true
   with_items:
     - '{{ rbenv.rubies }}'
   environment: "{{ item.env | default({}) | combine({ 'TMPDIR': rbenv_tmpdir }) }}"
@@ -106,7 +106,7 @@
 - name: check which old rubies to remove for system
   set_fact:
     drop_ruby: "{{ '{'+item[0].stdout_lines|list|difference(item[1])|join(',')+'}' }}"
-  become: yes
+  become: true
   with_nested:
     - "{{ rbenv_versions.results }}"
     - "{{ rbenv.rubies|map(attribute='version')|list }}"
@@ -114,25 +114,25 @@
     - rbenv_clean_up | bool
     - item[0].stdout_lines|list != item[1]
   register: removable_rubies
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: remove old rubies
   shell: $0 -lc "rm -rf {{ rbenv_root }}/versions/{{ ansible_facts.drop_ruby }}"
   changed_when: false
-  become: yes
+  become: true
   when: rbenv_clean_up | bool
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: check if current system ruby version is {{ rbenv.default_ruby }}
   shell: $0 -lc "rbenv version | cut -d ' ' -f 1 | grep -Fx '{{ rbenv.default_ruby }}'"
   register: ruby_selected
   changed_when: false
-  ignore_errors: yes
+  ignore_errors: true
   failed_when: false
   check_mode: no
 
 - name: set ruby {{ rbenv.default_ruby }} for system
-  become: yes
+  become: true
   shell: $0 -lc "rbenv global {{ rbenv.default_ruby }} && rbenv rehash"
   when:
     - ruby_selected.rc != 0
